@@ -10,11 +10,11 @@ class GuestCheck
 {
     /**
      * Handle an incoming request.
-     * This middleware just passes through - guest checking is handled client-side
+     *
+     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
     public function handle(Request $request, Closure $next): Response
     {
-        // Let all requests through - guest checking is handled by JavaScript
         return $next($request);
     }
 }

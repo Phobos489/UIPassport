@@ -83,7 +83,7 @@
                                 </tr>
                             </thead>
                             <tbody id="requirementsTableBody" class="align-middle">
-                                <!-- Data akan dimuat via JavaScript -->
+                                <!-- Data will be loaded via JavaScript -->
                             </tbody>
                         </table>
                     </div>
@@ -226,60 +226,35 @@
         const backend = "{{ env('BACKEND_URL', 'http://localhost:3000') }}";
         let detailModal;
 
-        // Untuk DASHBOARD (Admin Only)
-(function checkAdminAuth() {
-    const token = localStorage.getItem('uipassport_token');
-    const userStr = localStorage.getItem('uipassport_user');
-
-    if (!token || !userStr) {
-        console.log('No auth, redirecting to login');
-        window.location.replace('/login');
-        return;
-    }
-
-    try {
-        const user = JSON.parse(userStr);
-        if (user.role !== 'admin') {
-            console.log('Not admin, redirecting to home');
-            window.location.replace('/');
-            return;
-        }
-    } catch (e) {
-        console.error('Invalid user data');
-        localStorage.removeItem('uipassport_token');
-        localStorage.removeItem('uipassport_user');
-        window.location.replace('/login');
-    }
-})();
-
-        document.addEventListener('DOMContentLoaded', function () {
-            // Check if user is admin
+        // ADMIN AUTH CHECK - Redirect if not admin
+        (function checkAdminAuth() {
             const token = localStorage.getItem('uipassport_token');
             const userStr = localStorage.getItem('uipassport_user');
 
             if (!token || !userStr) {
-                window.location.href = '/login';
+                console.log('No auth, redirecting to login');
+                window.location.replace('/login');
                 return;
             }
 
             try {
                 const user = JSON.parse(userStr);
                 if (user.role !== 'admin') {
-                    window.location.href = '/';
+                    console.log('Not admin, redirecting to home');
+                    window.location.replace('/');
                     return;
                 }
             } catch (e) {
-                window.location.href = '/login';
-                return;
+                console.error('Invalid user data');
+                localStorage.removeItem('uipassport_token');
+                localStorage.removeItem('uipassport_user');
+                window.location.replace('/login');
             }
+        })();
 
-            // Initialize modal
+        document.addEventListener('DOMContentLoaded', function () {
             detailModal = new bootstrap.Modal(document.getElementById('detailModal'));
-
-            // Load requirements
             loadRequirements();
-
-            // Handle update status form
             document.getElementById('updateStatusForm').addEventListener('submit', handleUpdateStatus);
         });
 
@@ -297,9 +272,7 @@
 
             try {
                 const res = await fetch(`${backend}/api/requirements/all`, {
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    }
+                    headers: { 'Authorization': `Bearer ${token}` }
                 });
 
                 const data = await res.json();
@@ -316,14 +289,12 @@
                     return;
                 }
 
-                // Calculate statistics
                 const diproses = data.filter(r => r.status === 'diproses').length;
                 const diterima = data.filter(r => r.status === 'diterima').length;
                 const ditolak = data.filter(r => r.status === 'ditolak').length;
 
                 updateStatistics(data, diproses, diterima, ditolak);
 
-                // Populate table
                 const tbody = document.getElementById('requirementsTableBody');
                 tbody.innerHTML = data.map((req, index) => `
                 <tr>
@@ -392,9 +363,7 @@
 
             try {
                 const res = await fetch(`${backend}/api/requirements/all`, {
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    }
+                    headers: { 'Authorization': `Bearer ${token}` }
                 });
 
                 const data = await res.json();
@@ -404,9 +373,6 @@
                     throw new Error('Data tidak ditemukan');
                 }
 
-                console.log('Requirement data:', requirement); // Debug
-
-                // Populate modal
                 document.getElementById('detailNama').textContent = requirement.nama_lengkap || '-';
                 document.getElementById('detailEmail').textContent = requirement.email || '-';
                 document.getElementById('detailTanggal').textContent = new Date(requirement.created_at).toLocaleDateString('id-ID', {
@@ -417,10 +383,8 @@
                     minute: '2-digit'
                 });
                 
-                // Update status badge correctly
                 updateStatusBadgeElement(requirement.status);
 
-                // Set document links - cek dulu apakah path ada
                 if (requirement.ktp_path) {
                     document.getElementById('linkKTP').href = `${backend}/${requirement.ktp_path}`;
                     document.getElementById('linkKTP').style.display = 'inline-block';
@@ -442,7 +406,6 @@
                     document.getElementById('linkDokumen').style.display = 'none';
                 }
 
-                // Optional documents
                 const containerPewarganegaraan = document.getElementById('containerSuratPewarganegaraan');
                 const linkPewarganegaraan = document.getElementById('linkSuratPewarganegaraan');
                 
@@ -465,7 +428,6 @@
                     containerGantiNama.classList.add('d-none');
                 }
 
-                // Set form values
                 document.getElementById('requirementId').value = requirement.id;
                 document.getElementById('statusSelect').value = requirement.status;
                 document.getElementById('catatanAdmin').value = requirement.catatan_admin || '';
@@ -510,10 +472,8 @@
                     throw new Error(data.message || 'Gagal update status');
                 }
 
-                // Close modal
                 detailModal.hide();
 
-                // Show success message
                 const alertEl = document.getElementById('dashboardAlert');
                 alertEl.className = 'alert alert-success';
                 alertEl.innerHTML = `
@@ -524,7 +484,6 @@
             `;
                 alertEl.classList.remove('d-none');
 
-                // Reload data
                 setTimeout(() => {
                     alertEl.classList.add('d-none');
                     loadRequirements();

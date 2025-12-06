@@ -13,16 +13,8 @@ class CheckRole
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-    public function handle(Request $request, Closure $next, string ...$roles): Response
+    public function handle(Request $request, Closure $next): Response
     {
-        // Get user role from cookie/session
-        $userRole = $request->cookie('user_role');
-        
-        if (!$userRole || !in_array($userRole, $roles)) {
-            // User doesn't have required role, show 404
-            return response()->view('errors.404', [], 404);
-        }
-
         return $next($request);
     }
 }
