@@ -14,8 +14,7 @@
                                 <i class="bi bi-person-plus text-success" style="font-size: 2rem;"></i>
                             </div>
                             <h3 class="fw-bold mb-2">Daftar Akun Baru</h3>
-                            <p class="text-muted small mb-0">Isi data diri untuk membuat akun dan mengajukan persyaratan
-                                paspor</p>
+                            <p class="text-muted small mb-0">Isi data diri untuk membuat akun dan mengajukan persyaratan paspor</p>
                         </div>
 
                         <!-- Alert -->
@@ -30,8 +29,7 @@
                                         <i class="bi bi-person me-1"></i>
                                         Nama Lengkap <span class="text-danger">*</span>
                                     </label>
-                                    <input type="text" id="nama_lengkap" class="form-control" placeholder="Nama Lengkap"
-                                        required>
+                                    <input type="text" id="nama_lengkap" class="form-control" placeholder="Nama Lengkap" required>
                                 </div>
 
                                 <!-- Email -->
@@ -40,8 +38,7 @@
                                         <i class="bi bi-envelope me-1"></i>
                                         Email <span class="text-danger">*</span>
                                     </label>
-                                    <input type="email" id="email" class="form-control" placeholder="name@example.com"
-                                        required>
+                                    <input type="email" id="email" class="form-control" placeholder="name@example.com" required>
                                 </div>
 
                                 <!-- Password -->
@@ -50,8 +47,7 @@
                                         <i class="bi bi-lock me-1"></i>
                                         Password <span class="text-danger">*</span>
                                     </label>
-                                    <input type="password" id="password" class="form-control"
-                                        placeholder="Minimal 6 karakter" required>
+                                    <input type="password" id="password" class="form-control" placeholder="Minimal 6 karakter" required>
                                 </div>
 
                                 <!-- Tanggal Lahir -->
@@ -87,24 +83,20 @@
                                         <i class="bi bi-house me-1"></i>
                                         Alamat
                                     </label>
-                                    <textarea id="alamat" class="form-control" rows="2"
-                                        placeholder="Alamat lengkap"></textarea>
+                                    <textarea id="alamat" class="form-control" rows="2" placeholder="Alamat lengkap"></textarea>
                                 </div>
                             </div>
 
                             <!-- Info Box -->
-                            <div class="alert alert-info d-flex align-items-start mt-3 mb-4" data-aos="fade-up"
-                                data-aos-delay="500">
+                            <div class="alert alert-info d-flex align-items-start mt-3 mb-4" data-aos="fade-up" data-aos-delay="500">
                                 <i class="bi bi-info-circle-fill me-2 fs-5"></i>
                                 <small>
-                                    <strong>Catatan:</strong> Field yang ditandai dengan <span class="text-danger">*</span>
-                                    wajib diisi
+                                    <strong>Catatan:</strong> Field yang ditandai dengan <span class="text-danger">*</span> wajib diisi
                                 </small>
                             </div>
 
                             <!-- Submit Button -->
-                            <button type="submit" class="btn btn-primary-custom w-100 py-3 mb-3" data-aos="fade-up"
-                                data-aos-delay="550">
+                            <button type="submit" class="btn btn-primary-custom w-100 py-3 mb-3" data-aos="fade-up" data-aos-delay="550">
                                 <span class="spinner-border spinner-border-sm d-none me-2" id="regSpinner"></span>
                                 <i class="bi bi-person-plus me-2" id="regIcon"></i>
                                 <span id="regBtnText">Daftar</span>
@@ -137,144 +129,130 @@
 
 @push('scripts')
     <script>
-        // Cookie helper functions
-function setCookie(name, value, days = 7) {
-    const expires = new Date();
-    expires.setTime(expires.getTime() + days * 24 * 60 * 60 * 1000);
-    document.cookie = `${name}=${value};expires=${expires.toUTCString()};path=/;SameSite=Lax`;
-}
+        document.addEventListener('DOMContentLoaded', function () {
+            // Check if already logged in
+            const token = localStorage.getItem('uipassport_token');
+            const userStr = localStorage.getItem('uipassport_user');
 
-function getCookie(name) {
-    const value = `; ${document.cookie}`;
-    const parts = value.split(`; ${name}=`);
-    if (parts.length === 2) return parts.pop().split(';').shift();
-    return null;
-}
+            if (token && userStr) {
+                try {
+                    const user = JSON.parse(userStr);
+                    if (user.role === 'admin') {
+                        window.location.replace('/dashboard');
+                    } else {
+                        window.location.replace('/form');
+                    }
+                } catch (e) {
+                    localStorage.removeItem('uipassport_token');
+                    localStorage.removeItem('uipassport_user');
+                }
+            }
 
-document.addEventListener('DOMContentLoaded', function () {
-    // Check if already logged in
-    const token = getCookie('auth_token');
-    const userRole = getCookie('user_role');
+            const today = new Date();
+            const maxDate = new Date(today.getFullYear() - 17, today.getMonth(), today.getDate());
+            const dateInput = document.getElementById('tanggal_lahir');
 
-    if (token && userRole) {
-        if (userRole === 'admin') {
-            window.location.href = '/dashboard';
-        } else {
-            window.location.href = '/form';
-        }
-        return;
-    }
-
-    const today = new Date();
-    const maxDate = new Date(today.getFullYear() - 17, today.getMonth(), today.getDate());
-    const dateInput = document.getElementById('tanggal_lahir');
-
-    if (dateInput) {
-        dateInput.max = maxDate.toISOString().split('T')[0];
-    }
-});
-
-document.getElementById('registerForm').addEventListener('submit', async function (e) {
-    e.preventDefault();
-
-    const backend = "{{ env('BACKEND_URL', 'http://localhost:3000') }}";
-
-    const payload = {
-        email: document.getElementById('email').value.trim(),
-        password: document.getElementById('password').value,
-        nama_lengkap: document.getElementById('nama_lengkap').value.trim(),
-        tanggal_lahir: document.getElementById('tanggal_lahir').value || null,
-        tempat_lahir: document.getElementById('tempat_lahir').value.trim() || null,
-        alamat: document.getElementById('alamat').value.trim() || null,
-        no_telepon: document.getElementById('no_telepon').value.trim() || null
-    };
-
-    const alertEl = document.getElementById('regAlert');
-    const spinner = document.getElementById('regSpinner');
-    const icon = document.getElementById('regIcon');
-    const submitBtn = document.querySelector('#registerForm button[type="submit"]');
-    const btnText = document.getElementById('regBtnText');
-
-    alertEl.classList.add('d-none');
-
-    spinner.classList.remove('d-none');
-    icon.classList.add('d-none');
-    btnText.textContent = 'Memproses...';
-    submitBtn.disabled = true;
-
-    if (!payload.email || !payload.password || !payload.nama_lengkap) {
-        alertEl.className = 'alert alert-danger';
-        alertEl.innerHTML = `
-            <div class="d-flex align-items-center">
-                <i class="bi bi-exclamation-triangle-fill me-2"></i>
-                <div>Nama lengkap, email, dan password wajib diisi</div>
-            </div>
-        `;
-        alertEl.classList.remove('d-none');
-
-        spinner.classList.add('d-none');
-        icon.classList.remove('d-none');
-        btnText.textContent = 'Daftar';
-        submitBtn.disabled = false;
-        return;
-    }
-
-    try {
-        const res = await fetch(`${backend}/api/auth/register`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
+            if (dateInput) {
+                dateInput.max = maxDate.toISOString().split('T')[0];
+            }
         });
 
-        const data = await res.json();
+        document.getElementById('registerForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
 
-        if (!res.ok) {
-            alertEl.className = 'alert alert-danger';
-            alertEl.innerHTML = `
-                <div class="d-flex align-items-center">
-                    <i class="bi bi-exclamation-triangle-fill me-2"></i>
-                    <div>${data.message || 'Gagal registrasi'}</div>
-                </div>
-            `;
-            alertEl.classList.remove('d-none');
-            return;
-        }
+            const backend = "{{ env('BACKEND_URL', 'http://localhost:3000') }}";
 
-        // Store in localStorage
-        localStorage.setItem('uipassport_token', data.token);
-        localStorage.setItem('uipassport_user', JSON.stringify(data.user || {}));
+            const payload = {
+                email: document.getElementById('email').value.trim(),
+                password: document.getElementById('password').value,
+                nama_lengkap: document.getElementById('nama_lengkap').value.trim(),
+                tanggal_lahir: document.getElementById('tanggal_lahir').value || null,
+                tempat_lahir: document.getElementById('tempat_lahir').value.trim() || null,
+                alamat: document.getElementById('alamat').value.trim() || null,
+                no_telepon: document.getElementById('no_telepon').value.trim() || null
+            };
 
-        // Store in cookies
-        setCookie('auth_token', data.token, 7);
-        setCookie('user_role', data.user.role, 7);
-        setCookie('user_email', data.user.email, 7);
+            const alertEl = document.getElementById('regAlert');
+            const spinner = document.getElementById('regSpinner');
+            const icon = document.getElementById('regIcon');
+            const submitBtn = document.querySelector('#registerForm button[type="submit"]');
+            const btnText = document.getElementById('regBtnText');
 
-        alertEl.className = 'alert alert-success';
-        alertEl.innerHTML = `
-            <div class="d-flex align-items-center">
-                <i class="bi bi-check-circle-fill me-2"></i>
-                <div>${data.message || 'Registrasi berhasil! Mengarahkan ke formulir...'}</div>
-            </div>
-        `;
-        alertEl.classList.remove('d-none');
+            alertEl.classList.add('d-none');
 
-        setTimeout(() => window.location.href = '/form', 900);
-    } catch (err) {
-        console.error(err);
-        alertEl.className = 'alert alert-danger';
-        alertEl.innerHTML = `
-            <div class="d-flex align-items-center">
-                <i class="bi bi-exclamation-triangle-fill me-2"></i>
-                <div>Terjadi kesalahan jaringan</div>
-            </div>
-        `;
-        alertEl.classList.remove('d-none');
-    } finally {
-        spinner.classList.add('d-none');
-        icon.classList.remove('d-none');
-        btnText.textContent = 'Daftar';
-        submitBtn.disabled = false;
-    }
-});
+            spinner.classList.remove('d-none');
+            icon.classList.add('d-none');
+            btnText.textContent = 'Memproses...';
+            submitBtn.disabled = true;
+
+            if (!payload.email || !payload.password || !payload.nama_lengkap) {
+                alertEl.className = 'alert alert-danger';
+                alertEl.innerHTML = `
+                    <div class="d-flex align-items-center">
+                        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                        <div>Nama lengkap, email, dan password wajib diisi</div>
+                    </div>
+                `;
+                alertEl.classList.remove('d-none');
+
+                spinner.classList.add('d-none');
+                icon.classList.remove('d-none');
+                btnText.textContent = 'Daftar';
+                submitBtn.disabled = false;
+                return;
+            }
+
+            try {
+                const res = await fetch(`${backend}/api/auth/register`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                const data = await res.json();
+
+                if (!res.ok) {
+                    alertEl.className = 'alert alert-danger';
+                    alertEl.innerHTML = `
+                        <div class="d-flex align-items-center">
+                            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                            <div>${data.message || 'Gagal registrasi'}</div>
+                        </div>
+                    `;
+                    alertEl.classList.remove('d-none');
+                    return;
+                }
+
+                // Store in localStorage
+                localStorage.setItem('uipassport_token', data.token);
+                localStorage.setItem('uipassport_user', JSON.stringify(data.user || {}));
+
+                alertEl.className = 'alert alert-success';
+                alertEl.innerHTML = `
+                    <div class="d-flex align-items-center">
+                        <i class="bi bi-check-circle-fill me-2"></i>
+                        <div>${data.message || 'Registrasi berhasil! Mengarahkan ke formulir...'}</div>
+                    </div>
+                `;
+                alertEl.classList.remove('d-none');
+
+                setTimeout(() => window.location.replace('/form'), 900);
+            } catch (err) {
+                console.error(err);
+                alertEl.className = 'alert alert-danger';
+                alertEl.innerHTML = `
+                    <div class="d-flex align-items-center">
+                        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                        <div>Terjadi kesalahan jaringan</div>
+                    </div>
+                `;
+                alertEl.classList.remove('d-none');
+            } finally {
+                spinner.classList.add('d-none');
+                icon.classList.remove('d-none');
+                btnText.textContent = 'Daftar';
+                submitBtn.disabled = false;
+            }
+        });
     </script>
 @endpush

@@ -226,6 +226,32 @@
         const backend = "{{ env('BACKEND_URL', 'http://localhost:3000') }}";
         let detailModal;
 
+        // Untuk DASHBOARD (Admin Only)
+(function checkAdminAuth() {
+    const token = localStorage.getItem('uipassport_token');
+    const userStr = localStorage.getItem('uipassport_user');
+
+    if (!token || !userStr) {
+        console.log('No auth, redirecting to login');
+        window.location.replace('/login');
+        return;
+    }
+
+    try {
+        const user = JSON.parse(userStr);
+        if (user.role !== 'admin') {
+            console.log('Not admin, redirecting to home');
+            window.location.replace('/');
+            return;
+        }
+    } catch (e) {
+        console.error('Invalid user data');
+        localStorage.removeItem('uipassport_token');
+        localStorage.removeItem('uipassport_user');
+        window.location.replace('/login');
+    }
+})();
+
         document.addEventListener('DOMContentLoaded', function () {
             // Check if user is admin
             const token = localStorage.getItem('uipassport_token');

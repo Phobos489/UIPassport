@@ -14,6 +14,31 @@ Route::get('/', function () {
 
 /*
 |--------------------------------------------------------------------------
+| Debug Route (HAPUS DI PRODUCTION!)
+|--------------------------------------------------------------------------
+*/
+
+Route::get('/debug-cookie', function () {
+    return response(file_get_contents(resource_path('views/debug-cookie.html')))
+        ->header('Content-Type', 'text/html');
+});
+
+Route::get('/test-cookie', function () {
+    // Test untuk melihat cookie yang diterima server
+    $cookies = request()->cookies->all();
+    $headers = request()->headers->all();
+    
+    return response()->json([
+        'cookies' => $cookies,
+        'headers' => $headers,
+        'auth_token' => request()->cookie('auth_token'),
+        'user_role' => request()->cookie('user_role'),
+        'user_email' => request()->cookie('user_email'),
+    ]);
+});
+
+/*
+|--------------------------------------------------------------------------
 | Guest Only Routes (Only for users NOT logged in)
 |--------------------------------------------------------------------------
 */

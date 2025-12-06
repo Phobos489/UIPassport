@@ -264,6 +264,27 @@
     <script>
         const backend = "{{ env('BACKEND_URL', 'http://localhost:3000') }}";
 
+        // Untuk PROFILE (Any authenticated user)
+(function checkAnyAuth() {
+    const token = localStorage.getItem('uipassport_token');
+    const userStr = localStorage.getItem('uipassport_user');
+
+    if (!token || !userStr) {
+        console.log('No auth, redirecting to login');
+        window.location.replace('/login');
+        return;
+    }
+
+    try {
+        JSON.parse(userStr); // Just validate it's valid JSON
+    } catch (e) {
+        console.error('Invalid user data');
+        localStorage.removeItem('uipassport_token');
+        localStorage.removeItem('uipassport_user');
+        window.location.replace('/login');
+    }
+})();
+
         // Initialize on page load
         document.addEventListener('DOMContentLoaded', function () {
             console.log('Profile page loaded');

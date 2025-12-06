@@ -1,20 +1,14 @@
 <!doctype html>
 <html lang="id">
-
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Kantor Imigrasi - Pembuatan Passport</title>
-
-    <!-- Bootstrap 5 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Bootstrap icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
-    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <!-- AOS CSS -->
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 
     <style>
@@ -52,7 +46,6 @@
             overflow-x: hidden;
         }
 
-        /* Navbar Styles */
         .navbar {
             background: rgba(255, 255, 255, 0.95) !important;
             backdrop-filter: blur(10px);
@@ -166,7 +159,6 @@
             background: var(--light);
         }
 
-        /* Hero Section */
         .hero {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             padding: 5rem 0;
@@ -190,7 +182,6 @@
             padding: 5rem 0;
         }
 
-        /* Feature Card */
         .feature-card {
             background: white;
             border-radius: 1rem;
@@ -213,7 +204,6 @@
             margin-bottom: 1rem;
         }
 
-        /* Card Styles */
         .card {
             border: none;
             box-shadow: var(--shadow-md);
@@ -225,7 +215,6 @@
             box-shadow: var(--shadow-lg);
         }
 
-        /* Form Styles */
         .form-label {
             font-weight: 600;
             color: var(--dark);
@@ -246,21 +235,18 @@
             box-shadow: 0 0 0 0.2rem rgba(37, 99, 235, 0.1);
         }
 
-        /* Alert Styles */
         .alert {
             border-radius: 0.75rem;
             border: none;
             padding: 1rem 1.25rem;
         }
 
-        /* Badge Styles */
         .badge {
             padding: 0.5rem 1rem;
             border-radius: 50px;
             font-weight: 600;
         }
 
-        /* Table Styles */
         .table {
             border-radius: 0.5rem;
             overflow: hidden;
@@ -274,7 +260,6 @@
             background: rgba(37, 99, 235, 0.05);
         }
 
-        /* Footer */
         footer {
             background: linear-gradient(135deg, var(--dark) 0%, #1e293b 100%);
             color: #cbd5e1;
@@ -298,7 +283,6 @@
             color: var(--primary-light);
         }
 
-        /* Responsive */
         @media (max-width: 768px) {
             .hero {
                 padding: 3rem 0;
@@ -323,12 +307,10 @@
             }
         }
 
-        /* Smooth Scroll */
         html {
             scroll-behavior: smooth;
         }
 
-        /* Custom Scrollbar */
         ::-webkit-scrollbar {
             width: 10px;
         }
@@ -346,14 +328,12 @@
             background: var(--primary-dark);
         }
 
-        /* Spinner */
         .spinner-border-sm {
             width: 1rem;
             height: 1rem;
             border-width: 0.15em;
         }
 
-        /* Upload Area */
         .upload-area {
             border: 2px dashed var(--gray-light);
             border-radius: 1rem;
@@ -379,7 +359,6 @@
 </head>
 
 <body>
-
     <nav class="navbar navbar-expand-lg fixed-top" id="mainNavbar">
         <div class="container">
             <a class="navbar-brand" href="{{ url('/') }}">
@@ -387,20 +366,17 @@
                 <span>Kantor Imigrasi</span>
             </a>
 
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav"
-                aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
 
             <div class="collapse navbar-collapse" id="mainNav">
-                <!-- Navigation Menu (tetap tampil untuk semua user) -->
                 <ul class="navbar-nav ms-auto me-4 mb-2 mb-lg-0" id="publicNav">
                     <li class="nav-item">
                         <a class="nav-link" data-target="overview" onclick="handleNavClick('overview')">Overview</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" data-target="requirements"
-                            onclick="handleNavClick('requirements')">Persyaratan</a>
+                        <a class="nav-link" data-target="requirements" onclick="handleNavClick('requirements')">Persyaratan</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" data-target="how" onclick="handleNavClick('how')">Cara Daftar</a>
@@ -410,17 +386,14 @@
                     </li>
                 </ul>
 
-                <!-- Auth Buttons (untuk guest) -->
                 <div id="authButtons" class="d-flex gap-2">
                     <a href="{{ url('/login') }}" class="btn btn-outline-primary-custom">Masuk</a>
                     <a href="{{ url('/register') }}" class="btn btn-primary-custom">Daftar</a>
                 </div>
 
-                <!-- User Menu (untuk user/admin yang sudah login) -->
                 <div id="userMenu" class="d-none">
                     <div class="dropdown">
-                        <button class="btn btn-outline-primary-custom dropdown-toggle" type="button"
-                            data-bs-toggle="dropdown">
+                        <button class="btn btn-outline-primary-custom dropdown-toggle" type="button" data-bs-toggle="dropdown">
                             <i class="bi bi-person-circle me-2"></i>
                             <span id="userName">User</span>
                         </button>
@@ -430,13 +403,11 @@
                                     <i class="bi bi-person me-2"></i>Profil
                                 </a>
                             </li>
-                            <!-- Menu untuk Admin -->
                             <li id="dashboardMenuItem" class="d-none">
                                 <a class="dropdown-item" href="{{ url('/dashboard') }}">
                                     <i class="bi bi-speedometer2 me-2"></i>Dashboard Admin
                                 </a>
                             </li>
-                            <!-- Menu untuk User Biasa -->
                             <li id="formMenuItem" class="d-none">
                                 <a class="dropdown-item" href="{{ url('/form') }}">
                                     <i class="bi bi-file-earmark-text me-2"></i>Formulir Pengajuan
@@ -468,8 +439,7 @@
                     <h5 class="mb-3">
                         <i class="bi bi-passport me-2"></i>Kantor Imigrasi
                     </h5>
-                    <p class="small mb-3">Portal informasi pembuatan paspor – panduan lengkap, persyaratan, dan proses
-                        pendaftaran yang mudah dan cepat.</p>
+                    <p class="small mb-3">Portal informasi pembuatan paspor – panduan lengkap, persyaratan, dan proses pendaftaran yang mudah dan cepat.</p>
                     <p class="small mb-0">
                         <i class="bi bi-geo-alt-fill me-2"></i>Jl. Contoh No.10, Jakarta Pusat
                     </p>
@@ -479,8 +449,7 @@
                     <h6 class="mb-3">Navigasi</h6>
                     <ul class="list-unstyled small">
                         <li class="mb-2"><a href="#overview"><i class="bi bi-chevron-right me-1"></i>Overview</a></li>
-                        <li class="mb-2"><a href="#requirements"><i class="bi bi-chevron-right me-1"></i>Persyaratan</a>
-                        </li>
+                        <li class="mb-2"><a href="#requirements"><i class="bi bi-chevron-right me-1"></i>Persyaratan</a></li>
                         <li class="mb-2"><a href="#how"><i class="bi bi-chevron-right me-1"></i>Cara Daftar</a></li>
                         <li class="mb-2"><a href="#faq"><i class="bi bi-chevron-right me-1"></i>FAQ</a></li>
                     </ul>
@@ -541,75 +510,31 @@
             offset: 100
         });
 
-        
-// Add cookie helper functions if not already present
-function deleteCookie(name) {
-    document.cookie = `${name}=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/;`;
-}
+        function checkAuth() {
+            const token = localStorage.getItem('uipassport_token');
+            const userStr = localStorage.getItem('uipassport_user');
 
-function getCookie(name) {
-    const value = `; ${document.cookie}`;
-    const parts = value.split(`; ${name}=`);
-    if (parts.length === 2) return parts.pop().split(';').shift();
-    return null;
-}
-
-        // Update checkAuth function to use cookies
-function checkAuth() {
-    // Try to get from cookies first (server-side auth)
-    const cookieToken = getCookie('auth_token');
-    const cookieRole = getCookie('user_role');
-    const cookieEmail = getCookie('user_email');
-
-    // Fallback to localStorage
-    const localToken = localStorage.getItem('uipassport_token');
-    const localUserStr = localStorage.getItem('uipassport_user');
-
-    if (cookieToken && cookieRole) {
-        // User is authenticated via cookies
-        const user = {
-            role: cookieRole,
-            email: cookieEmail,
-            nama_lengkap: cookieEmail.split('@')[0]
-        };
-        showAuthenticatedNav(user);
-    } else if (localToken && localUserStr) {
-        // User is authenticated via localStorage
-        try {
-            const user = JSON.parse(localUserStr);
-            showAuthenticatedNav(user);
-            
-            // Sync to cookies
-            setCookie('auth_token', localToken, 7);
-            setCookie('user_role', user.role, 7);
-            setCookie('user_email', user.email, 7);
-        } catch (e) {
-            console.error('Error parsing user data:', e);
-            clearAuthData();
+            if (token && userStr) {
+                try {
+                    const user = JSON.parse(userStr);
+                    showAuthenticatedNav(user);
+                } catch (e) {
+                    console.error('Error parsing user data:', e);
+                    localStorage.removeItem('uipassport_token');
+                    localStorage.removeItem('uipassport_user');
+                    showGuestNav();
+                }
+            } else {
+                showGuestNav();
+            }
         }
-    } else {
-        showGuestNav();
-    }
-}
-
-function setCookie(name, value, days = 7) {
-    const expires = new Date();
-    expires.setTime(expires.getTime() + days * 24 * 60 * 60 * 1000);
-    document.cookie = `${name}=${value};expires=${expires.toUTCString()};path=/;SameSite=Lax`;
-}
 
         function showAuthenticatedNav(user) {
-            // Sembunyikan tombol login/register
             document.getElementById('authButtons').classList.add('d-none');
-            
-            // Tampilkan user menu
             document.getElementById('userMenu').classList.remove('d-none');
             document.getElementById('userName').textContent = user.nama_lengkap || user.email;
-
-            // Tampilkan menu publik untuk SEMUA user (baik admin maupun user biasa)
             document.getElementById('publicNav').classList.remove('d-none');
 
-            // Tentukan menu mana yang ditampilkan berdasarkan role
             if (user.role === 'admin') {
                 document.getElementById('dashboardMenuItem').classList.remove('d-none');
                 document.getElementById('formMenuItem').classList.add('d-none');
@@ -623,38 +548,17 @@ function setCookie(name, value, days = 7) {
             document.getElementById('authButtons').classList.remove('d-none');
             document.getElementById('userMenu').classList.add('d-none');
             document.getElementById('publicNav').classList.remove('d-none');
-            
-            // Reset semua menu dropdown
             document.getElementById('dashboardMenuItem').classList.add('d-none');
             document.getElementById('formMenuItem').classList.add('d-none');
         }
 
-        function clearAuthData() {
-    // Clear localStorage
-    localStorage.removeItem('uipassport_token');
-    localStorage.removeItem('uipassport_user');
-    
-    // Clear cookies
-    deleteCookie('auth_token');
-    deleteCookie('user_role');
-    deleteCookie('user_email');
-}
-
         function handleLogout() {
-    if (confirm('Apakah Anda yakin ingin keluar?')) {
-        // Clear localStorage
-        localStorage.removeItem('uipassport_token');
-        localStorage.removeItem('uipassport_user');
-        
-        // Clear cookies
-        deleteCookie('auth_token');
-        deleteCookie('user_role');
-        deleteCookie('user_email');
-        
-        // Redirect to home
-        window.location.href = '/';
-    }
-}
+            if (confirm('Apakah Anda yakin ingin keluar?')) {
+                localStorage.removeItem('uipassport_token');
+                localStorage.removeItem('uipassport_user');
+                window.location.replace('/');
+            }
+        }
 
         window.addEventListener('scroll', function () {
             const navbar = document.getElementById('mainNavbar');
@@ -700,7 +604,6 @@ function setCookie(name, value, days = 7) {
                             top: offsetTop,
                             behavior: 'smooth'
                         });
-
                         history.replaceState(null, null, '#' + sectionParam);
                     }
                 }, 300);
@@ -731,5 +634,4 @@ function setCookie(name, value, days = 7) {
     </script>
     @stack('scripts')
 </body>
-
 </html>

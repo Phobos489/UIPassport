@@ -10,19 +10,11 @@ class CheckAuth
 {
     /**
      * Handle an incoming request.
-     *
-     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
+     * This middleware just passes through - authentication is handled client-side
      */
     public function handle(Request $request, Closure $next): Response
     {
-        // Cek apakah ada auth token dari cookie atau header
-        $token = $request->cookie('auth_token') ?? $request->header('Authorization');
-        
-        if (!$token) {
-            // User belum login, redirect ke login
-            return redirect('/login');
-        }
-
+        // Let all requests through - authentication is handled by JavaScript
         return $next($request);
     }
 }

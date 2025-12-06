@@ -69,140 +69,124 @@
 
 @push('scripts')
     <script>
-        // Add this function at the top of the script
-function setCookie(name, value, days = 7) {
-    const expires = new Date();
-    expires.setTime(expires.getTime() + days * 24 * 60 * 60 * 1000);
-    document.cookie = `${name}=${value};expires=${expires.toUTCString()};path=/;SameSite=Lax`;
-}
+        // Check if already logged in on page load
+        document.addEventListener('DOMContentLoaded', function () {
+            const token = localStorage.getItem('uipassport_token');
+            const userStr = localStorage.getItem('uipassport_user');
 
-function getCookie(name) {
-    const value = `; ${document.cookie}`;
-    const parts = value.split(`; ${name}=`);
-    if (parts.length === 2) return parts.pop().split(';').shift();
-    return null;
-}
-
-function deleteCookie(name) {
-    document.cookie = `${name}=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/;`;
-}
-
-// Check if already logged in on page load
-document.addEventListener('DOMContentLoaded', function () {
-    const token = getCookie('auth_token');
-    const userRole = getCookie('user_role');
-
-    if (token && userRole) {
-        // Already logged in, redirect based on role
-        if (userRole === 'admin') {
-            window.location.href = '/dashboard';
-        } else {
-            window.location.href = '/form';
-        }
-        return;
-    }
-});
-
-// Handle login form submission
-document.getElementById('loginForm').addEventListener('submit', async function (e) {
-    e.preventDefault();
-
-    const backend = "{{ env('BACKEND_URL', 'http://localhost:3000') }}";
-    const email = document.getElementById('email').value.trim();
-    const password = document.getElementById('password').value;
-
-    const alertEl = document.getElementById('loginAlert');
-    const spinner = document.getElementById('loginSpinner');
-    const icon = document.getElementById('loginIcon');
-    const submitBtn = document.querySelector('#loginForm button[type="submit"]');
-    const btnText = document.getElementById('loginBtnText');
-
-    alertEl.classList.add('d-none');
-
-    spinner.classList.remove('d-none');
-    icon.classList.add('d-none');
-    btnText.textContent = 'Memproses...';
-    submitBtn.disabled = true;
-
-    if (!email || !password) {
-        alertEl.className = 'alert alert-danger';
-        alertEl.innerHTML = `
-            <div class="d-flex align-items-center">
-                <i class="bi bi-exclamation-triangle-fill me-2"></i>
-                <div>Email dan password wajib diisi</div>
-            </div>
-        `;
-        alertEl.classList.remove('d-none');
-
-        spinner.classList.add('d-none');
-        icon.classList.remove('d-none');
-        btnText.textContent = 'Masuk';
-        submitBtn.disabled = false;
-        return;
-    }
-
-    try {
-        const res = await fetch(`${backend}/api/auth/login`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email, password })
+            if (token && userStr) {
+                try {
+                    const user = JSON.parse(userStr);
+                    // Already logged in, redirect based on role
+                    if (user.role === 'admin') {
+                        window.location.replace('/dashboard');
+                    } else {
+                        window.location.replace('/form');
+                    }
+                } catch (e) {
+                    // Invalid data, clear it
+                    localStorage.removeItem('uipassport_token');
+                    localStorage.removeItem('uipassport_user');
+                }
+            }
         });
 
-        const data = await res.json();
+        // Handle login form submission
+        document.getElementById('loginForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
 
-        if (!res.ok) {
-            alertEl.className = 'alert alert-danger';
-            alertEl.innerHTML = `
-                <div class="d-flex align-items-center">
-                    <i class="bi bi-exclamation-triangle-fill me-2"></i>
-                    <div>${data.message || 'Gagal login'}</div>
-                </div>
-            `;
-            alertEl.classList.remove('d-none');
-            return;
-        }
+            const backend = "{{ env('BACKEND_URL', 'http://localhost:3000') }}";
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
 
-        // Store in localStorage (for backward compatibility)
-        localStorage.setItem('uipassport_token', data.token);
-        localStorage.setItem('uipassport_user', JSON.stringify(data.user || {}));
+            const alertEl = document.getElementById('loginAlert');
+            const spinner = document.getElementById('loginSpinner');
+            const icon = document.getElementById('loginIcon');
+            const submitBtn = document.querySelector('#loginForm button[type="submit"]');
+            const btnText = document.getElementById('loginBtnText');
 
-        // Store in cookies (for server-side middleware)
-        setCookie('auth_token', data.token, 7);
-        setCookie('user_role', data.user.role, 7);
-        setCookie('user_email', data.user.email, 7);
+            alertEl.classList.add('d-none');
 
-        alertEl.className = 'alert alert-success';
-        alertEl.innerHTML = `
-            <div class="d-flex align-items-center">
-                <i class="bi bi-check-circle-fill me-2"></i>
-                <div>${data.message || 'Login berhasil! Mengarahkan...'}</div>
-            </div>
-        `;
-        alertEl.classList.remove('d-none');
+            spinner.classList.remove('d-none');
+            icon.classList.add('d-none');
+            btnText.textContent = 'Memproses...';
+            submitBtn.disabled = true;
 
-        setTimeout(() => {
-            if (data.user.role === 'admin') {
-                window.location.href = '/dashboard';
-            } else {
-                window.location.href = '/form';
+            if (!email || !password) {
+                alertEl.className = 'alert alert-danger';
+                alertEl.innerHTML = `
+                    <div class="d-flex align-items-center">
+                        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                        <div>Email dan password wajib diisi</div>
+                    </div>
+                `;
+                alertEl.classList.remove('d-none');
+
+                spinner.classList.add('d-none');
+                icon.classList.remove('d-none');
+                btnText.textContent = 'Masuk';
+                submitBtn.disabled = false;
+                return;
             }
-        }, 700);
-    } catch (err) {
-        console.error(err);
-        alertEl.className = 'alert alert-danger';
-        alertEl.innerHTML = `
-            <div class="d-flex align-items-center">
-                <i class="bi bi-exclamation-triangle-fill me-2"></i>
-                <div>Terjadi kesalahan jaringan</div>
-            </div>
-        `;
-        alertEl.classList.remove('d-none');
-    } finally {
-        spinner.classList.add('d-none');
-        icon.classList.remove('d-none');
-        btnText.textContent = 'Masuk';
-        submitBtn.disabled = false;
-    }
-});
+
+            try {
+                const res = await fetch(`${backend}/api/auth/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const data = await res.json();
+
+                if (!res.ok) {
+                    alertEl.className = 'alert alert-danger';
+                    alertEl.innerHTML = `
+                        <div class="d-flex align-items-center">
+                            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                            <div>${data.message || 'Gagal login'}</div>
+                        </div>
+                    `;
+                    alertEl.classList.remove('d-none');
+                    return;
+                }
+
+                // Store in localStorage
+                localStorage.setItem('uipassport_token', data.token);
+                localStorage.setItem('uipassport_user', JSON.stringify(data.user || {}));
+
+                alertEl.className = 'alert alert-success';
+                alertEl.innerHTML = `
+                    <div class="d-flex align-items-center">
+                        <i class="bi bi-check-circle-fill me-2"></i>
+                        <div>${data.message || 'Login berhasil! Mengarahkan...'}</div>
+                    </div>
+                `;
+                alertEl.classList.remove('d-none');
+
+                // Redirect based on role
+                setTimeout(() => {
+                    if (data.user.role === 'admin') {
+                        window.location.replace('/dashboard');
+                    } else {
+                        window.location.replace('/form');
+                    }
+                }, 700);
+            } catch (err) {
+                console.error(err);
+                alertEl.className = 'alert alert-danger';
+                alertEl.innerHTML = `
+                    <div class="d-flex align-items-center">
+                        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                        <div>Terjadi kesalahan jaringan</div>
+                    </div>
+                `;
+                alertEl.classList.remove('d-none');
+            } finally {
+                spinner.classList.add('d-none');
+                icon.classList.remove('d-none');
+                btnText.textContent = 'Masuk';
+                submitBtn.disabled = false;
+            }
+        });
     </script>
 @endpush

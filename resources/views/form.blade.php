@@ -214,6 +214,32 @@
     <script>
         const backend = "{{ env('BACKEND_URL', 'http://localhost:3000') }}";
 
+        // Untuk FORM (User Only)
+(function checkUserAuth() {
+    const token = localStorage.getItem('uipassport_token');
+    const userStr = localStorage.getItem('uipassport_user');
+
+    if (!token || !userStr) {
+        console.log('No auth, redirecting to login');
+        window.location.replace('/login');
+        return;
+    }
+
+    try {
+        const user = JSON.parse(userStr);
+        if (user.role !== 'user') {
+            console.log('Not user, redirecting to dashboard');
+            window.location.replace('/dashboard');
+            return;
+        }
+    } catch (e) {
+        console.error('Invalid user data');
+        localStorage.removeItem('uipassport_token');
+        localStorage.removeItem('uipassport_user');
+        window.location.replace('/login');
+    }
+})();
+
         document.addEventListener('DOMContentLoaded', function () {
             // Check if user is authenticated
             const token = localStorage.getItem('uipassport_token');

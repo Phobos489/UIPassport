@@ -10,24 +10,11 @@ class GuestCheck
 {
     /**
      * Handle an incoming request.
-     *
-     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
+     * This middleware just passes through - guest checking is handled client-side
      */
     public function handle(Request $request, Closure $next): Response
     {
-        // Cek apakah ada auth token di cookie
-        $token = $request->cookie('auth_token');
-        $userRole = $request->cookie('user_role');
-        
-        if ($token && $userRole) {
-            // User sudah login, redirect based on role
-            if ($userRole === 'admin') {
-                return redirect('/dashboard');
-            } else {
-                return redirect('/form');
-            }
-        }
-
+        // Let all requests through - guest checking is handled by JavaScript
         return $next($request);
     }
 }
