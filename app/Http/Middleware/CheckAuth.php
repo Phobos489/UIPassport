@@ -15,12 +15,12 @@ class CheckAuth
      */
     public function handle(Request $request, Closure $next): Response
     {
-        // Cek apakah ada auth token
+        // Cek apakah ada auth token dari cookie atau header
         $token = $request->cookie('auth_token') ?? $request->header('Authorization');
         
         if (!$token) {
-            // User belum login, tampilkan 404
-            return response()->view('errors.404', [], 404);
+            // User belum login, redirect ke login
+            return redirect('/login');
         }
 
         return $next($request);

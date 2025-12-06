@@ -18,9 +18,14 @@ Route::get('/', function () {
 |--------------------------------------------------------------------------
 */
 
-Route::middleware(['guest.check'])->group(function () {
-    Route::view('/login', 'auth.login')->name('login');
-    Route::view('/register', 'auth.register')->name('register');
+Route::middleware('guest.check')->group(function () {
+    Route::get('/login', function () {
+        return view('auth.login');
+    })->name('login');
+    
+    Route::get('/register', function () {
+        return view('auth.register');
+    })->name('register');
 });
 
 /*
@@ -30,8 +35,13 @@ Route::middleware(['guest.check'])->group(function () {
 */
 
 Route::middleware(['auth.check', 'role.check:user'])->group(function () {
-    Route::view('/form', 'form')->name('form');
-    Route::view('/profile', 'profile')->name('profile');
+    Route::get('/form', function () {
+        return view('form');
+    })->name('form');
+    
+    Route::get('/profile', function () {
+        return view('profile');
+    })->name('profile');
 });
 
 /*
@@ -41,8 +51,14 @@ Route::middleware(['auth.check', 'role.check:user'])->group(function () {
 */
 
 Route::middleware(['auth.check', 'role.check:admin'])->group(function () {
-    Route::view('/dashboard', 'dashboard')->name('dashboard');
-    Route::view('/profile', 'profile')->name('profile.admin');
+    Route::get('/dashboard', function () {
+        return view('dashboard');
+    })->name('dashboard');
+    
+    // Admin can also access profile
+    Route::get('/profile', function () {
+        return view('profile');
+    })->name('profile.admin');
 });
 
 /*
@@ -54,8 +70,3 @@ Route::middleware(['auth.check', 'role.check:admin'])->group(function () {
 Route::fallback(function () {
     return view('errors.404');
 });
-
-// Test route untuk middleware
-Route::get('/test-middleware', function () {
-    return 'Middleware test OK';
-})->middleware('auth.check');

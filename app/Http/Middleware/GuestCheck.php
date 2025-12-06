@@ -15,12 +15,17 @@ class GuestCheck
      */
     public function handle(Request $request, Closure $next): Response
     {
-        // Cek apakah ada auth token di cookie/session
-        $token = $request->cookie('auth_token') ?? $request->header('Authorization');
+        // Cek apakah ada auth token di cookie
+        $token = $request->cookie('auth_token');
+        $userRole = $request->cookie('user_role');
         
-        if ($token) {
-            // User sudah login, redirect ke 404
-            return response()->view('errors.404', [], 404);
+        if ($token && $userRole) {
+            // User sudah login, redirect based on role
+            if ($userRole === 'admin') {
+                return redirect('/dashboard');
+            } else {
+                return redirect('/form');
+            }
         }
 
         return $next($request);
