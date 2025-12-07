@@ -17,6 +17,25 @@
                 <!-- Form Card -->
                 <div class="feature-card" data-aos="fade-up" data-aos-delay="100">
                     <form id="requirementForm" enctype="multipart/form-data">
+                        <!-- TAMBAHKAN FOTO DI SINI - SEBELUM KTP -->
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">
+                                <i class="bi bi-person-bounding-box text-danger me-2"></i>
+                                Foto Diri (Foto 4x6)<span class="text-danger">*</span>
+                            </label>
+                            <p class="small text-muted mb-2">Upload foto ukuran 4x6 cm dengan latar belakang putih/terang
+                                (JPG, PNG - Max 5MB)</p>
+                            <div class="upload-area" onclick="document.getElementById('foto').click()">
+                                <input type="file" id="foto" name="foto" accept=".jpg,.jpeg,.png" required hidden
+                                    onchange="handleFileSelect(this, 'fotoPreview')">
+                                <div id="fotoPreview" class="preview-content">
+                                    <i class="bi bi-cloud-upload" style="font-size: 3rem; color: var(--danger);"></i>
+                                    <p class="mb-0 mt-2"><strong>Klik untuk upload Foto Diri</strong></p>
+                                    <p class="small text-muted mb-0">atau drag & drop file di sini</p>
+                                </div>
+                            </div>
+                        </div>
+
                         <!-- KTP -->
                         <div class="mb-4">
                             <label class="form-label fw-bold">
@@ -55,20 +74,21 @@
                             </div>
                         </div>
 
-                        <!-- Dokumen Paspor -->
+                        <!-- Dokumen Pendukung Identitas -->
                         <div class="mb-4">
                             <label class="form-label fw-bold">
                                 <i class="bi bi-file-earmark-text text-warning me-2"></i>
-                                Dokumen Paspor (Foto 4x6) <span class="text-danger">*</span>
+                                Dokumen Pendukung Identitas <span class="text-danger">*</span>
                             </label>
-                            <p class="small text-muted mb-2">Upload foto ukuran 4x6 cm dengan latar belakang putih/terang
+                            <p class="small text-muted mb-2">Upload scan atau foto dokumen (Akte Kelahiran, Ijazah, Buku
+                                Nikah/Akta Perkawinan, Surat Baptis)
                                 (JPG, PNG, PDF - Max 5MB)</p>
                             <div class="upload-area" onclick="document.getElementById('dokumen').click()">
                                 <input type="file" id="dokumen" name="dokumen" accept=".jpg,.jpeg,.png,.pdf" required hidden
                                     onchange="handleFileSelect(this, 'dokumenPreview')">
                                 <div id="dokumenPreview" class="preview-content">
                                     <i class="bi bi-cloud-upload" style="font-size: 3rem; color: var(--warning);"></i>
-                                    <p class="mb-0 mt-2"><strong>Klik untuk upload Dokumen Paspor</strong></p>
+                                    <p class="mb-0 mt-2"><strong>Klik untuk upload Dokumen Pendukung Identitas</strong></p>
                                     <p class="small text-muted mb-0">atau drag & drop file di sini</p>
                                 </div>
                             </div>
@@ -97,7 +117,7 @@
                         <!-- Surat Ganti Nama (Optional) -->
                         <div class="mb-4">
                             <label class="form-label fw-bold">
-                                <i class="bi bi-file-earmark-person text-secondary me-2"></i>
+                                <i class="bi bi-file-earmark-person text-dark me-2"></i>
                                 Surat Ganti Nama <span class="text-muted">(Opsional)</span>
                             </label>
                             <p class="small text-muted mb-2">Jika pernah ganti nama, upload surat keterangan ganti nama
@@ -107,7 +127,7 @@
                                     accept=".jpg,.jpeg,.png,.pdf" hidden
                                     onchange="handleFileSelect(this, 'gantiNamaPreview')">
                                 <div id="gantiNamaPreview" class="preview-content">
-                                    <i class="bi bi-cloud-upload" style="font-size: 3rem; color: var(--secondary);"></i>
+                                    <i class="bi bi-cloud-upload" style="font-size: 3rem; color: var(--dark);"></i>
                                     <p class="mb-0 mt-2"><strong>Klik untuk upload (Opsional)</strong></p>
                                     <p class="small text-muted mb-0">atau drag & drop file di sini</p>
                                 </div>
@@ -215,30 +235,30 @@
         const backend = "{{ env('BACKEND_URL', 'http://localhost:3000') }}";
 
         // Untuk FORM (User Only)
-(function checkUserAuth() {
-    const token = localStorage.getItem('uipassport_token');
-    const userStr = localStorage.getItem('uipassport_user');
+        (function checkUserAuth() {
+            const token = localStorage.getItem('uipassport_token');
+            const userStr = localStorage.getItem('uipassport_user');
 
-    if (!token || !userStr) {
-        console.log('No auth, redirecting to login');
-        window.location.replace('/login');
-        return;
-    }
+            if (!token || !userStr) {
+                console.log('No auth, redirecting to login');
+                window.location.replace('/login');
+                return;
+            }
 
-    try {
-        const user = JSON.parse(userStr);
-        if (user.role !== 'user') {
-            console.log('Not user, redirecting to dashboard');
-            window.location.replace('/dashboard');
-            return;
-        }
-    } catch (e) {
-        console.error('Invalid user data');
-        localStorage.removeItem('uipassport_token');
-        localStorage.removeItem('uipassport_user');
-        window.location.replace('/login');
-    }
-})();
+            try {
+                const user = JSON.parse(userStr);
+                if (user.role !== 'user') {
+                    console.log('Not user, redirecting to dashboard');
+                    window.location.replace('/dashboard');
+                    return;
+                }
+            } catch (e) {
+                console.error('Invalid user data');
+                localStorage.removeItem('uipassport_token');
+                localStorage.removeItem('uipassport_user');
+                window.location.replace('/login');
+            }
+        })();
 
         document.addEventListener('DOMContentLoaded', function () {
             // Check if user is authenticated
@@ -285,14 +305,14 @@
                     const alertEl = document.getElementById('formAlert');
                     alertEl.className = 'alert alert-warning';
                     alertEl.innerHTML = `
-                        <div class="d-flex align-items-start">
-                            <i class="bi bi-exclamation-triangle-fill me-3 fs-4"></i>
-                            <div>
-                                <strong>Anda sudah mengajukan persyaratan sebelumnya</strong>
-                                <p class="mb-0 mt-2">Silakan cek status pengajuan Anda di halaman <a href="/profile" class="alert-link">Profil</a>. Jika ingin mengajukan ulang, hubungi admin terlebih dahulu.</p>
-                            </div>
-                        </div>
-                    `;
+                                <div class="d-flex align-items-start">
+                                    <i class="bi bi-exclamation-triangle-fill me-3 fs-4"></i>
+                                    <div>
+                                        <strong>Anda sudah mengajukan persyaratan sebelumnya</strong>
+                                        <p class="mb-0 mt-2">Silakan cek status pengajuan Anda di halaman <a href="/profile" class="alert-link">Profil</a>. Jika ingin mengajukan ulang, hubungi admin terlebih dahulu.</p>
+                                    </div>
+                                </div>
+                            `;
                     alertEl.classList.remove('d-none');
 
                     // Disable form
@@ -334,19 +354,20 @@
             const color = file.type === 'application/pdf' ? 'danger' : 'success';
 
             preview.innerHTML = `
-                <div class="file-info">
-                    <i class="bi bi-${icon}-fill text-${color}" style="font-size: 2rem;"></i>
-                    <div>
-                        <p class="file-name mb-0">${file.name}</p>
-                        <small class="text-muted">${(file.size / 1024).toFixed(2)} KB</small>
-                    </div>
-                    <button type="button" class="remove-file" onclick="removeFile('${input.id}', '${previewId}')">
-                        <i class="bi bi-x"></i>
-                    </button>
-                </div>
-            `;
+                        <div class="file-info">
+                            <i class="bi bi-${icon}-fill text-${color}" style="font-size: 2rem;"></i>
+                            <div>
+                                <p class="file-name mb-0">${file.name}</p>
+                                <small class="text-muted">${(file.size / 1024).toFixed(2)} KB</small>
+                            </div>
+                            <button type="button" class="remove-file" onclick="removeFile('${input.id}', '${previewId}')">
+                                <i class="bi bi-x"></i>
+                            </button>
+                        </div>
+                    `;
         }
 
+        // Update fungsi removeFile untuk menambahkan fotoPreview
         function removeFile(inputId, previewId) {
             const input = document.getElementById(inputId);
             const preview = document.getElementById(previewId);
@@ -356,6 +377,7 @@
             uploadArea.classList.remove('has-file');
 
             const icons = {
+                'fotoPreview': { icon: 'cloud-upload', color: 'info', label: 'Foto Diri' },  // TAMBAHKAN INI
                 'ktpPreview': { icon: 'cloud-upload', color: 'primary', label: 'KTP' },
                 'kkPreview': { icon: 'cloud-upload', color: 'success', label: 'KK' },
                 'dokumenPreview': { icon: 'cloud-upload', color: 'warning', label: 'Dokumen Paspor' },
@@ -372,23 +394,27 @@
             `;
         }
 
+        // Update fungsi handleSubmit untuk menambahkan foto
         async function handleSubmit(e) {
             e.preventDefault();
 
             const token = localStorage.getItem('uipassport_token');
             const formData = new FormData();
 
+            const foto = document.getElementById('foto').files[0];  // TAMBAHKAN INI
             const ktp = document.getElementById('ktp').files[0];
             const kk = document.getElementById('kk').files[0];
             const dokumen = document.getElementById('dokumen').files[0];
             const pewarganegaraan = document.getElementById('surat_pewarganegaraan').files[0];
             const gantiNama = document.getElementById('surat_ganti_nama').files[0];
 
-            if (!ktp || !kk || !dokumen) {
-                showAlert('danger', 'KTP, KK, dan Dokumen Paspor wajib diunggah');
+            // Update validasi
+            if (!foto || !ktp || !kk || !dokumen) {
+                showAlert('danger', 'Foto, KTP, KK, dan Dokumen Paspor wajib diunggah');
                 return;
             }
 
+            formData.append('foto', foto);  // TAMBAHKAN INI
             formData.append('ktp', ktp);
             formData.append('kk', kk);
             formData.append('dokumen', dokumen);
@@ -439,11 +465,11 @@
 
             alertEl.className = `alert alert-${type}`;
             alertEl.innerHTML = `
-                <div class="d-flex align-items-center">
-                    <i class="bi bi-${icon} me-2"></i>
-                    <div>${message}</div>
-                </div>
-            `;
+                        <div class="d-flex align-items-center">
+                            <i class="bi bi-${icon} me-2"></i>
+                            <div>${message}</div>
+                        </div>
+                    `;
             alertEl.classList.remove('d-none');
 
             window.scrollTo({ top: 0, behavior: 'smooth' });

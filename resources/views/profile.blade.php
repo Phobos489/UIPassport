@@ -146,6 +146,21 @@
                                 <!-- Documents List -->
                                 <h6 class="fw-bold mb-3 small">Dokumen yang Diunggah</h6>
                                 <div class="row row-cols-1 row-cols-md-2 g-2">
+                                    <!-- TAMBAHKAN FOTO DI SINI -->
+                                    <div class="col">
+                                        <div class="border rounded-2 p-2 h-100">
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <div>
+                                                    <i class="bi bi-person-bounding-box text-danger me-2"></i>
+                                                    <span class="fw-semibold small">Foto Diri</span>
+                                                </div>
+                                                <a id="linkFoto" href="#" target="_blank"
+                                                    class="btn btn-sm btn-outline-danger btn-sm">
+                                                    <i class="bi bi-eye"></i>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
                                     <div class="col">
                                         <div class="border rounded-2 p-2 h-100">
                                             <div class="d-flex justify-content-between align-items-center">
@@ -455,10 +470,10 @@
             } catch (err) {
                 console.error('Profile load error:', err);
                 loadingEl.innerHTML = `
-                    <div class="alert alert-danger py-1">
-                        <i class="bi bi-exclamation-triangle me-2"></i>
-                        <small>Gagal memuat profil: ${err.message}</small>
-                    </div>`;
+                                <div class="alert alert-danger py-1">
+                                    <i class="bi bi-exclamation-triangle me-2"></i>
+                                    <small>Gagal memuat profil: ${err.message}</small>
+                                </div>`;
             }
         }
 
@@ -609,11 +624,11 @@
             const icon = type === 'success' ? 'check-circle-fill' : 'exclamation-triangle-fill';
             element.className = `alert alert-${type}`;
             element.innerHTML = `
-                    <div class="d-flex align-items-center">
-                        <i class="bi bi-${icon} me-2"></i>
-                        <div>${message}</div>
-                    </div>
-                `;
+                                <div class="d-flex align-items-center">
+                                    <i class="bi bi-${icon} me-2"></i>
+                                    <div>${message}</div>
+                                </div>
+                            `;
             element.classList.remove('d-none');
         }
 
@@ -630,14 +645,14 @@
                 loadingEl.classList.add('d-none');
                 noSubmissionEl.classList.remove('d-none');
                 noSubmissionEl.innerHTML = `
-                    <div class="text-center py-2">
-                        <i class="bi bi-shield-check text-primary mb-2" style="font-size: 2rem;"></i>
-                        <h6 class="fw-bold mb-1 small">Akun Administrator</h6>
-                        <p class="text-muted small mb-2">Anda login sebagai admin.</p>
-                        <a href="/dashboard" class="btn btn-primary btn-sm px-2">
-                            <i class="bi bi-speedometer2 me-1"></i>Dashboard Admin
-                        </a>
-                    </div>`;
+                                <div class="text-center py-2">
+                                    <i class="bi bi-shield-check text-primary mb-2" style="font-size: 2rem;"></i>
+                                    <h6 class="fw-bold mb-1 small">Akun Administrator</h6>
+                                    <p class="text-muted small mb-2">Anda login sebagai admin.</p>
+                                    <a href="/dashboard" class="btn btn-primary btn-sm px-2">
+                                        <i class="bi bi-speedometer2 me-1"></i>Dashboard Admin
+                                    </a>
+                                </div>`;
                 return;
             }
 
@@ -662,7 +677,7 @@
                 updateStatusDisplay(submission.status);
 
                 document.getElementById('statusDate').innerHTML = `
-                    <i class="bi bi-calendar3 me-1"></i>Diajukan: ${new Date(submission.created_at).toLocaleDateString('id-ID', {
+                                <i class="bi bi-calendar3 me-1"></i>Diajukan: ${new Date(submission.created_at).toLocaleDateString('id-ID', {
                     day: 'numeric',
                     month: 'short',
                     year: 'numeric',
@@ -673,6 +688,11 @@
                 if (submission.catatan_admin) {
                     document.getElementById('adminNotesContainer').classList.remove('d-none');
                     document.getElementById('adminNotes').textContent = submission.catatan_admin;
+                }
+
+                // TAMBAHKAN HANDLE FOTO
+                if (submission.foto_path) {
+                    document.getElementById('linkFoto').href = `${backend}/${submission.foto_path}`;
                 }
 
                 if (submission.ktp_path) {
@@ -700,10 +720,10 @@
             } catch (err) {
                 console.error('Submission load error:', err);
                 loadingEl.innerHTML = `
-                    <div class="alert alert-danger py-1">
-                        <i class="bi bi-exclamation-triangle me-2"></i>
-                        <small>Gagal memuat status pengajuan: ${err.message}</small>
-                    </div>`;
+                                <div class="alert alert-danger py-1">
+                                    <i class="bi bi-exclamation-triangle me-2"></i>
+                                    <small>Gagal memuat status pengajuan: ${err.message}</small>
+                                </div>`;
             }
         }
 

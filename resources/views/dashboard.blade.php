@@ -232,6 +232,17 @@
                     <!-- Documents -->
                     <h6 class="fw-bold mb-3">Dokumen yang Diunggah</h6>
                     <div class="row g-3 mb-4">
+                        <!-- TAMBAHKAN FOTO DI SINI -->
+                        <div class="col-md-6">
+                            <div class="border rounded-3 p-3">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <span class="fw-bold">Foto Diri</span>
+                                    <a id="linkFoto" href="#" target="_blank" class="btn btn-sm btn-outline-primary-custom">
+                                        <i class="bi bi-eye"></i> Lihat
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
                         <div class="col-md-6">
                             <div class="border rounded-3 p-3">
                                 <div class="d-flex justify-content-between align-items-center mb-2">
@@ -559,19 +570,19 @@
 
                 const tbody = document.getElementById('requirementsTableBody');
                 tbody.innerHTML = data.map((req, index) => `
-                        <tr>
-                            <td>${index + 1}</td>
-                            <td>${req.nama_lengkap || '-'}</td>
-                            <td>${req.email || '-'}</td>
-                            <td>${new Date(req.created_at).toLocaleDateString('id-ID')}</td>
-                            <td>${getStatusBadge(req.status)}</td>
-                            <td>
-                                <button class="btn btn-sm btn-primary-custom" onclick="showDetail(${req.id})">
-                                    <i class="bi bi-eye"></i> Detail
-                                </button>
-                            </td>
-                        </tr>
-                    `).join('');
+                            <tr>
+                                <td>${index + 1}</td>
+                                <td>${req.nama_lengkap || '-'}</td>
+                                <td>${req.email || '-'}</td>
+                                <td>${new Date(req.created_at).toLocaleDateString('id-ID')}</td>
+                                <td>${getStatusBadge(req.status)}</td>
+                                <td>
+                                    <button class="btn btn-sm btn-primary-custom" onclick="showDetail(${req.id})">
+                                        <i class="bi bi-eye"></i> Detail
+                                    </button>
+                                </td>
+                            </tr>
+                        `).join('');
 
                 tableContainer.classList.remove('d-none');
 
@@ -617,20 +628,20 @@
                         : '-';
 
                     return `
-                    <tr>
-                        <td>${index + 1}</td>
-                        <td>${user.nama_lengkap || '-'}</td>
-                        <td>${user.email || '-'}</td>
-                        <td>${tglLahir}</td>
-                        <td>${user.no_telepon || '-'}</td>
-                        <td>${new Date(user.created_at).toLocaleDateString('id-ID')}</td>
-                        <td>
-                            <button class="btn btn-sm btn-primary-custom" onclick="showUserDetail(${user.id})">
-                                <i class="bi bi-eye"></i> Detail
-                            </button>
-                        </td>
-                    </tr>
-                `;
+                        <tr>
+                            <td>${index + 1}</td>
+                            <td>${user.nama_lengkap || '-'}</td>
+                            <td>${user.email || '-'}</td>
+                            <td>${tglLahir}</td>
+                            <td>${user.no_telepon || '-'}</td>
+                            <td>${new Date(user.created_at).toLocaleDateString('id-ID')}</td>
+                            <td>
+                                <button class="btn btn-sm btn-primary-custom" onclick="showUserDetail(${user.id})">
+                                    <i class="bi bi-eye"></i> Detail
+                                </button>
+                            </td>
+                        </tr>
+                    `;
                 }).join('');
 
                 usersTableContainer.classList.remove('d-none');
@@ -708,6 +719,7 @@
             badgeElement.textContent = config.text;
         }
 
+        // Di dalam fungsi showDetail, tambahkan setelah container documents
         async function showDetail(reqId) {
             const token = localStorage.getItem('uipassport_token');
 
@@ -732,6 +744,14 @@
                 });
 
                 updateStatusBadgeElement(requirement.status);
+
+                // TAMBAHKAN HANDLE FOTO
+                if (requirement.foto_path) {
+                    document.getElementById('linkFoto').href = `${backend}/${requirement.foto_path}`;
+                    document.getElementById('linkFoto').style.display = 'inline-block';
+                } else {
+                    document.getElementById('linkFoto').style.display = 'none';
+                }
 
                 if (requirement.ktp_path) {
                     document.getElementById('linkKTP').href = `${backend}/${requirement.ktp_path}`;
@@ -843,11 +863,11 @@
 
             alertEl.className = `alert alert-${type}`;
             alertEl.innerHTML = `
-                    <div class="d-flex align-items-center">
-                        <i class="bi bi-${icon} me-2"></i>
-                        <div>${message}</div>
-                    </div>
-                `;
+                        <div class="d-flex align-items-center">
+                            <i class="bi bi-${icon} me-2"></i>
+                            <div>${message}</div>
+                        </div>
+                    `;
             alertEl.classList.remove('d-none');
 
             setTimeout(() => alertEl.classList.add('d-none'), 3000);
