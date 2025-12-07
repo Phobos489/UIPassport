@@ -496,14 +496,24 @@
                     document.getElementById('statDiproses').textContent = diproses;
                     document.getElementById('statDiterima').textContent = diterima;
                     document.getElementById('statDitolak').textContent = ditolak;
-                }
 
-                // Load users count (we'll need a new endpoint for this)
-                // For now, we'll use a placeholder
-                document.getElementById('statTotalUsers').textContent = '0';
+                    // Calculate total unique users from requirements
+                    const uniqueEmails = new Set();
+                    data.forEach(req => {
+                        if (req.email) {
+                            uniqueEmails.add(req.email);
+                        }
+                    });
+                    
+                    document.getElementById('statTotalUsers').textContent = uniqueEmails.size;
+                } else {
+                    // Set default if request fails
+                    document.getElementById('statTotalUsers').textContent = '0';
+                }
                 
             } catch (err) {
                 console.error('Error loading statistics:', err);
+                document.getElementById('statTotalUsers').textContent = '0';
             }
         }
 
@@ -597,9 +607,6 @@
                         });
                     }
                 }
-
-                // Update total users stat
-                document.getElementById('statTotalUsers').textContent = uniqueUsers.length;
 
                 loadingUsers.classList.add('d-none');
 
