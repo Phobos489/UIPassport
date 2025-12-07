@@ -39,7 +39,7 @@
                         <h2 class="fw-bold mb-2" id="statKepuasan">
                             <span class="spinner-border spinner-border-sm"></span>
                         </h2>
-                        <p class="mb-0">Tingkat Diterima</p>
+                        <p class="mb-0">Tingkat Kepuasan</p>
                     </div>
                 </div>
                 <div class="col-md-4" data-aos="fade-up" data-aos-delay="400">
@@ -519,45 +519,43 @@
 @endsection
 
 @push('scripts')
-    @push('scripts')
-        <script>
-            // Load statistics on page load
-            document.addEventListener('DOMContentLoaded', async function () {
-                await loadStatistics();
-            });
+    <script>
+        // Load statistics on page load
+        document.addEventListener('DOMContentLoaded', async function () {
+            await loadStatistics();
+        });
 
-            async function loadStatistics() {
-                const backend = "{{ env('BACKEND_URL', 'http://localhost:3000') }}";
+        async function loadStatistics() {
+            const backend = "{{ env('BACKEND_URL', 'http://localhost:3000') }}";
 
-                try {
-                    // Fetch statistics from backend WITHOUT token
-                    const res = await fetch(`${backend}/api/requirements/statistics`);
+            try {
+                // Fetch statistics from backend WITHOUT token
+                const res = await fetch(`${backend}/api/requirements/statistics`);
 
-                    if (!res.ok) {
-                        // If failed, use fallback data
-                        throw new Error('Failed to fetch statistics');
-                    }
-
-                    const data = await res.json();
-
-                    // Update statistics in HTML
-                    document.getElementById('statTotalPaspor').textContent =
-                        data.total > 1000 ? (data.total / 1000).toFixed(1) + 'K+' : data.total;
-
-                    // Calculate acceptance rate
-                    const acceptanceRate = data.total > 0
-                        ? Math.round((data.diterima / data.total) * 100)
-                        : (data.acceptance_rate || 95);
-
-                    document.getElementById('statKepuasan').textContent = acceptanceRate + '%';
-
-                } catch (err) {
-                    console.error('Error loading statistics:', err);
-                    // Show default/fallback values
-                    document.getElementById('statTotalPaspor').textContent = '50K+';
-                    document.getElementById('statKepuasan').textContent = '98%';
+                if (!res.ok) {
+                    // If failed, use fallback data
+                    throw new Error('Failed to fetch statistics');
                 }
+
+                const data = await res.json();
+
+                // Update statistics in HTML
+                document.getElementById('statTotalPaspor').textContent =
+                    data.total > 1000 ? (data.total / 1000).toFixed(1) + 'K+' : data.total;
+
+                // Calculate acceptance rate
+                const acceptanceRate = data.total > 0
+                    ? Math.round((data.diterima / data.total) * 100)
+                    : (data.acceptance_rate || 95);
+
+                document.getElementById('statKepuasan').textContent = acceptanceRate + '%';
+
+            } catch (err) {
+                console.error('Error loading statistics:', err);
+                // Show default/fallback values
+                document.getElementById('statTotalPaspor').textContent = '50K+';
+                document.getElementById('statKepuasan').textContent = '98%';
             }
-        </script>
-    @endpush
+        }
+    </script>
 @endpush

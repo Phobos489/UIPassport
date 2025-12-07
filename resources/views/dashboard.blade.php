@@ -3,106 +3,199 @@
 @section('content')
     <section class="section"
         style="padding-top: 2rem; padding-bottom: 4.5rem; min-height: 100vh; background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);">
-        <div class="container">
-            <!-- Header -->
-            <div class="mb-4" data-aos="fade-down">
-                <h2 class="fw-bold mb-2">
-                    <i class="bi bi-speedometer2 text-primary me-2"></i>Dashboard Admin
-                </h2>
-                <p class="text-muted">Kelola semua pengajuan persyaratan paspor</p>
-            </div>
-
-            <!-- Alert -->
-            <div id="dashboardAlert" class="alert d-none" role="alert"></div>
-
-            <!-- Statistics Cards -->
-            <div class="row g-4 mb-4">
-                <div class="col-md-4" data-aos="fade-up" data-aos-delay="100">
-                    <div class="feature-card text-center">
-                        <div class="bg-warning bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
-                            style="width: 70px; height: 70px;">
-                            <i class="bi bi-hourglass-split text-warning" style="font-size: 2rem;"></i>
+        <div class="container-fluid">
+            <div class="row">
+                <!-- Sidebar -->
+                <div class="col-lg-3 col-xl-2 mb-4">
+                    <div class="sidebar-wrapper" data-aos="fade-right">
+                        <div class="feature-card p-3">
+                            <h6 class="fw-bold mb-3 pb-2 border-bottom">
+                                <i class="bi bi-grid-fill text-primary me-2"></i>Menu Admin
+                            </h6>
+                            
+                            <nav class="nav flex-column">
+                                <a class="nav-link sidebar-link active" href="#" data-section="overview" onclick="switchSection('overview')">
+                                    <i class="bi bi-speedometer2 me-2"></i>
+                                    <span>Overview</span>
+                                </a>
+                                <a class="nav-link sidebar-link" href="#" data-section="requirements" onclick="switchSection('requirements')">
+                                    <i class="bi bi-file-earmark-text me-2"></i>
+                                    <span>Pengajuan</span>
+                                </a>
+                                <a class="nav-link sidebar-link" href="#" data-section="users" onclick="switchSection('users')">
+                                    <i class="bi bi-people me-2"></i>
+                                    <span>Kelola User</span>
+                                </a>
+                            </nav>
                         </div>
-                        <h3 class="fw-bold mb-1" id="statDiproses">0</h3>
-                        <p class="text-muted mb-0">Sedang Diproses</p>
                     </div>
                 </div>
-                <div class="col-md-4" data-aos="fade-up" data-aos-delay="150">
-                    <div class="feature-card text-center">
-                        <div class="bg-success bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
-                            style="width: 70px; height: 70px;">
-                            <i class="bi bi-check-circle text-success" style="font-size: 2rem;"></i>
+
+                <!-- Main Content -->
+                <div class="col-lg-9 col-xl-10">
+                    <!-- Header -->
+                    <div class="mb-4" data-aos="fade-down">
+                        <h2 class="fw-bold mb-2">
+                            <i class="bi bi-speedometer2 text-primary me-2"></i>Dashboard Admin
+                        </h2>
+                        <p class="text-muted">Kelola semua pengajuan persyaratan paspor dan akun user</p>
+                    </div>
+
+                    <!-- Alert -->
+                    <div id="dashboardAlert" class="alert d-none" role="alert"></div>
+
+                    <!-- Overview Section -->
+                    <div id="overviewSection" class="content-section">
+                        <!-- Statistics Cards -->
+                        <div class="row g-4 mb-4">
+                            <div class="col-md-3" data-aos="fade-up" data-aos-delay="100">
+                                <div class="feature-card text-center">
+                                    <div class="bg-primary bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
+                                        style="width: 60px; height: 60px;">
+                                        <i class="bi bi-people text-primary" style="font-size: 1.8rem;"></i>
+                                    </div>
+                                    <h3 class="fw-bold mb-1" id="statTotalUsers">0</h3>
+                                    <p class="text-muted mb-0 small">Total User</p>
+                                </div>
+                            </div>
+                            <div class="col-md-3" data-aos="fade-up" data-aos-delay="150">
+                                <div class="feature-card text-center">
+                                    <div class="bg-warning bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
+                                        style="width: 60px; height: 60px;">
+                                        <i class="bi bi-hourglass-split text-warning" style="font-size: 1.8rem;"></i>
+                                    </div>
+                                    <h3 class="fw-bold mb-1" id="statDiproses">0</h3>
+                                    <p class="text-muted mb-0 small">Sedang Diproses</p>
+                                </div>
+                            </div>
+                            <div class="col-md-3" data-aos="fade-up" data-aos-delay="200">
+                                <div class="feature-card text-center">
+                                    <div class="bg-success bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
+                                        style="width: 60px; height: 60px;">
+                                        <i class="bi bi-check-circle text-success" style="font-size: 1.8rem;"></i>
+                                    </div>
+                                    <h3 class="fw-bold mb-1" id="statDiterima">0</h3>
+                                    <p class="text-muted mb-0 small">Diterima</p>
+                                </div>
+                            </div>
+                            <div class="col-md-3" data-aos="fade-up" data-aos-delay="250">
+                                <div class="feature-card text-center">
+                                    <div class="bg-danger bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
+                                        style="width: 60px; height: 60px;">
+                                        <i class="bi bi-x-circle text-danger" style="font-size: 1.8rem;"></i>
+                                    </div>
+                                    <h3 class="fw-bold mb-1" id="statDitolak">0</h3>
+                                    <p class="text-muted mb-0 small">Ditolak</p>
+                                </div>
+                            </div>
                         </div>
-                        <h3 class="fw-bold mb-1" id="statDiterima">0</h3>
-                        <p class="text-muted mb-0">Diterima</p>
                     </div>
-                </div>
-                <div class="col-md-4" data-aos="fade-up" data-aos-delay="200">
-                    <div class="feature-card text-center">
-                        <div class="bg-danger bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
-                            style="width: 70px; height: 70px;">
-                            <i class="bi bi-x-circle text-danger" style="font-size: 2rem;"></i>
+
+                    <!-- Requirements Section -->
+                    <div id="requirementsSection" class="content-section d-none">
+                        <div class="feature-card" data-aos="fade-up" data-aos-delay="100">
+                            <div class="d-flex justify-content-between align-items-center mb-4">
+                                <h5 class="fw-bold mb-0">
+                                    <i class="bi bi-list-check text-primary me-2"></i>Daftar Pengajuan
+                                </h5>
+                                <button class="btn btn-primary-custom btn-sm" onclick="loadRequirements()">
+                                    <i class="bi bi-arrow-clockwise me-1"></i>Refresh
+                                </button>
+                            </div>
+
+                            <!-- Loading Spinner -->
+                            <div id="loadingSpinner" class="text-center py-5">
+                                <div class="spinner-border text-primary" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                                <p class="text-muted mt-2">Memuat data...</p>
+                            </div>
+
+                            <!-- Table -->
+                            <div id="tableContainer" class="d-none">
+                                <div class="table-responsive">
+                                    <table class="table table-hover">
+                                        <thead class="table-light">
+                                            <tr>
+                                                <th>No</th>
+                                                <th>Nama Lengkap</th>
+                                                <th>Email</th>
+                                                <th>Tanggal Pengajuan</th>
+                                                <th>Status</th>
+                                                <th>Aksi</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="requirementsTableBody" class="align-middle">
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <!-- Empty State -->
+                            <div id="emptyState" class="text-center py-5 d-none">
+                                <i class="bi bi-inbox text-muted" style="font-size: 4rem;"></i>
+                                <p class="text-muted mt-3">Belum ada pengajuan persyaratan</p>
+                            </div>
                         </div>
-                        <h3 class="fw-bold mb-1" id="statDitolak">0</h3>
-                        <p class="text-muted mb-0">Ditolak</p>
                     </div>
-                </div>
-            </div>
 
-            <!-- Data Table -->
-            <div class="feature-card" data-aos="fade-up" data-aos-delay="250">
-                <div class="d-flex justify-content-between align-items-center mb-4">
-                    <h5 class="fw-bold mb-0">
-                        <i class="bi bi-list-check text-primary me-2"></i>Daftar Pengajuan
-                    </h5>
-                    <button class="btn btn-primary-custom btn-sm" onclick="loadRequirements()">
-                        <i class="bi bi-arrow-clockwise me-1"></i>Refresh
-                    </button>
-                </div>
+                    <!-- Users Section -->
+                    <div id="usersSection" class="content-section d-none">
+                        <div class="feature-card" data-aos="fade-up" data-aos-delay="100">
+                            <div class="d-flex justify-content-between align-items-center mb-4">
+                                <h5 class="fw-bold mb-0">
+                                    <i class="bi bi-people text-primary me-2"></i>Kelola Akun User
+                                </h5>
+                                <button class="btn btn-primary-custom btn-sm" onclick="loadUsers()">
+                                    <i class="bi bi-arrow-clockwise me-1"></i>Refresh
+                                </button>
+                            </div>
 
-                <!-- Loading Spinner -->
-                <div id="loadingSpinner" class="text-center py-5">
-                    <div class="spinner-border text-primary" role="status">
-                        <span class="visually-hidden">Loading...</span>
+                            <!-- Loading Spinner -->
+                            <div id="loadingUsers" class="text-center py-5">
+                                <div class="spinner-border text-primary" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                                <p class="text-muted mt-2">Memuat data user...</p>
+                            </div>
+
+                            <!-- Users Table -->
+                            <div id="usersTableContainer" class="d-none">
+                                <div class="table-responsive">
+                                    <table class="table table-hover">
+                                        <thead class="table-light">
+                                            <tr>
+                                                <th>No</th>
+                                                <th>Nama Lengkap</th>
+                                                <th>Email</th>
+                                                <th>Tanggal Lahir</th>
+                                                <th>No. Telepon</th>
+                                                <th>Bergabung</th>
+                                                <th>Aksi</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="usersTableBody" class="align-middle">
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <!-- Empty State -->
+                            <div id="emptyUsers" class="text-center py-5 d-none">
+                                <i class="bi bi-people text-muted" style="font-size: 4rem;"></i>
+                                <p class="text-muted mt-3">Belum ada user terdaftar</p>
+                            </div>
+                        </div>
                     </div>
-                    <p class="text-muted mt-2">Memuat data...</p>
-                </div>
-
-                <!-- Table -->
-                <div id="tableContainer" class="d-none">
-                    <div class="table-responsive">
-                        <table class="table table-hover">
-                            <thead class="table-light">
-                                <tr>
-                                    <th>No</th>
-                                    <th>Nama Lengkap</th>
-                                    <th>Email</th>
-                                    <th>Tanggal Pengajuan</th>
-                                    <th>Status</th>
-                                    <th>Aksi</th>
-                                </tr>
-                            </thead>
-                            <tbody id="requirementsTableBody" class="align-middle">
-                                <!-- Data will be loaded via JavaScript -->
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <!-- Empty State -->
-                <div id="emptyState" class="text-center py-5 d-none">
-                    <i class="bi bi-inbox text-muted" style="font-size: 4rem;"></i>
-                    <p class="text-muted mt-3">Belum ada pengajuan persyaratan</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Modal Detail & Update Status -->
+    <!-- Modal Detail Requirement -->
     <div class="modal fade" id="detailModal" tabindex="-1">
         <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
-            <div class="modal-content"
-                style="border-radius: 1rem; border: none; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);">
+            <div class="modal-content" style="border-radius: 1rem; border: none; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);">
                 <div class="modal-header border-0 pb-0">
                     <h5 class="modal-title fw-bold">
                         <i class="bi bi-file-earmark-text text-primary me-2"></i>Detail Pengajuan
@@ -159,8 +252,7 @@
                             <div class="border rounded-3 p-3">
                                 <div class="d-flex justify-content-between align-items-center mb-2">
                                     <span class="fw-bold">Dokumen Paspor</span>
-                                    <a id="linkDokumen" href="#" target="_blank"
-                                        class="btn btn-sm btn-outline-primary-custom">
+                                    <a id="linkDokumen" href="#" target="_blank" class="btn btn-sm btn-outline-primary-custom">
                                         <i class="bi bi-eye"></i> Lihat
                                     </a>
                                 </div>
@@ -170,8 +262,7 @@
                             <div class="border rounded-3 p-3">
                                 <div class="d-flex justify-content-between align-items-center mb-2">
                                     <span class="fw-bold">Surat Pewarganegaraan</span>
-                                    <a id="linkSuratPewarganegaraan" href="#" target="_blank"
-                                        class="btn btn-sm btn-outline-primary-custom">
+                                    <a id="linkSuratPewarganegaraan" href="#" target="_blank" class="btn btn-sm btn-outline-primary-custom">
                                         <i class="bi bi-eye"></i> Lihat
                                     </a>
                                 </div>
@@ -181,8 +272,7 @@
                             <div class="border rounded-3 p-3">
                                 <div class="d-flex justify-content-between align-items-center mb-2">
                                     <span class="fw-bold">Surat Ganti Nama</span>
-                                    <a id="linkSuratGantiNama" href="#" target="_blank"
-                                        class="btn btn-sm btn-outline-primary-custom">
+                                    <a id="linkSuratGantiNama" href="#" target="_blank" class="btn btn-sm btn-outline-primary-custom">
                                         <i class="bi bi-eye"></i> Lihat
                                     </a>
                                 </div>
@@ -204,8 +294,7 @@
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Catatan Admin (Opsional)</label>
-                            <textarea class="form-control" id="catatanAdmin" rows="3"
-                                placeholder="Tambahkan catatan jika diperlukan..."></textarea>
+                            <textarea class="form-control" id="catatanAdmin" rows="3" placeholder="Tambahkan catatan jika diperlukan..."></textarea>
                         </div>
                         <div class="d-flex gap-2 justify-content-end">
                             <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Batal</button>
@@ -219,20 +308,125 @@
             </div>
         </div>
     </div>
+
+    <!-- Modal Detail User -->
+    <div class="modal fade" id="userDetailModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content" style="border-radius: 1rem; border: none;">
+                <div class="modal-header border-0 pb-0">
+                    <h5 class="modal-title fw-bold">
+                        <i class="bi bi-person-circle text-primary me-2"></i>Detail User
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="text-center mb-4">
+                        <div class="bg-primary bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
+                            <i class="bi bi-person-fill text-primary" style="font-size: 2.5rem;"></i>
+                        </div>
+                    </div>
+
+                    <div class="bg-light rounded-3 p-3">
+                        <div class="row g-3">
+                            <div class="col-12">
+                                <small class="text-muted d-block mb-1">Nama Lengkap</small>
+                                <strong id="userDetailNama">-</strong>
+                            </div>
+                            <div class="col-12">
+                                <small class="text-muted d-block mb-1">Email</small>
+                                <strong id="userDetailEmail">-</strong>
+                            </div>
+                            <div class="col-md-6">
+                                <small class="text-muted d-block mb-1">Tanggal Lahir</small>
+                                <strong id="userDetailTglLahir">-</strong>
+                            </div>
+                            <div class="col-md-6">
+                                <small class="text-muted d-block mb-1">Tempat Lahir</small>
+                                <strong id="userDetailTempatLahir">-</strong>
+                            </div>
+                            <div class="col-md-6">
+                                <small class="text-muted d-block mb-1">No. Telepon</small>
+                                <strong id="userDetailTelepon">-</strong>
+                            </div>
+                            <div class="col-md-6">
+                                <small class="text-muted d-block mb-1">Bergabung</small>
+                                <strong id="userDetailJoined">-</strong>
+                            </div>
+                            <div class="col-12">
+                                <small class="text-muted d-block mb-1">Alamat</small>
+                                <strong id="userDetailAlamat">-</strong>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-3 text-center">
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Tutup</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .sidebar-wrapper {
+            position: sticky;
+            top: 90px;
+        }
+
+        .sidebar-link {
+            color: var(--dark);
+            padding: 0.75rem 1rem;
+            margin-bottom: 0.25rem;
+            border-radius: 0.5rem;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+        }
+
+        .sidebar-link:hover {
+            background: rgba(37, 99, 235, 0.1);
+            color: var(--primary);
+        }
+
+        .sidebar-link.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .sidebar-link i {
+            font-size: 1.1rem;
+        }
+
+        .content-section {
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
 @endsection
 
 @push('scripts')
     <script>
         const backend = "{{ env('BACKEND_URL', 'http://localhost:3000') }}";
-        let detailModal;
+        let detailModal, userDetailModal;
+        let currentSection = 'overview';
 
-        // ADMIN AUTH CHECK - Redirect if not admin
+        // ADMIN AUTH CHECK
         (function checkAdminAuth() {
             const token = localStorage.getItem('uipassport_token');
             const userStr = localStorage.getItem('uipassport_user');
 
             if (!token || !userStr) {
-                console.log('No auth, redirecting to login');
                 window.location.replace('/login');
                 return;
             }
@@ -240,23 +434,78 @@
             try {
                 const user = JSON.parse(userStr);
                 if (user.role !== 'admin') {
-                    console.log('Not admin, redirecting to home');
                     window.location.replace('/');
                     return;
                 }
             } catch (e) {
-                console.error('Invalid user data');
                 localStorage.removeItem('uipassport_token');
                 localStorage.removeItem('uipassport_user');
                 window.location.replace('/login');
             }
         })();
 
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function() {
             detailModal = new bootstrap.Modal(document.getElementById('detailModal'));
+            userDetailModal = new bootstrap.Modal(document.getElementById('userDetailModal'));
+            
+            loadStatistics();
             loadRequirements();
+            
             document.getElementById('updateStatusForm').addEventListener('submit', handleUpdateStatus);
         });
+
+        function switchSection(section) {
+            // Update sidebar active state
+            document.querySelectorAll('.sidebar-link').forEach(link => {
+                link.classList.remove('active');
+            });
+            document.querySelector(`[data-section="${section}"]`).classList.add('active');
+
+            // Hide all sections
+            document.querySelectorAll('.content-section').forEach(sec => {
+                sec.classList.add('d-none');
+            });
+
+            // Show selected section
+            document.getElementById(`${section}Section`).classList.remove('d-none');
+            currentSection = section;
+
+            // Load data based on section
+            if (section === 'requirements') {
+                loadRequirements();
+            } else if (section === 'users') {
+                loadUsers();
+            }
+        }
+
+        async function loadStatistics() {
+            const token = localStorage.getItem('uipassport_token');
+
+            try {
+                // Load requirements statistics
+                const reqRes = await fetch(`${backend}/api/requirements/all`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+
+                if (reqRes.ok) {
+                    const data = await reqRes.json();
+                    const diproses = data.filter(r => r.status === 'diproses').length;
+                    const diterima = data.filter(r => r.status === 'diterima').length;
+                    const ditolak = data.filter(r => r.status === 'ditolak').length;
+
+                    document.getElementById('statDiproses').textContent = diproses;
+                    document.getElementById('statDiterima').textContent = diterima;
+                    document.getElementById('statDitolak').textContent = ditolak;
+                }
+
+                // Load users count (we'll need a new endpoint for this)
+                // For now, we'll use a placeholder
+                document.getElementById('statTotalUsers').textContent = '0';
+                
+            } catch (err) {
+                console.error('Error loading statistics:', err);
+            }
+        }
 
         async function loadRequirements() {
             const token = localStorage.getItem('uipassport_token');
@@ -285,52 +534,135 @@
 
                 if (!data || data.length === 0) {
                     emptyState.classList.remove('d-none');
-                    updateStatistics([], 0, 0, 0);
                     return;
                 }
 
-                const diproses = data.filter(r => r.status === 'diproses').length;
-                const diterima = data.filter(r => r.status === 'diterima').length;
-                const ditolak = data.filter(r => r.status === 'ditolak').length;
-
-                updateStatistics(data, diproses, diterima, ditolak);
-
                 const tbody = document.getElementById('requirementsTableBody');
                 tbody.innerHTML = data.map((req, index) => `
-                <tr>
-                    <td>${index + 1}</td>
-                    <td>${req.nama_lengkap || '-'}</td>
-                    <td>${req.email || '-'}</td>
-                    <td>${new Date(req.created_at).toLocaleDateString('id-ID')}</td>
-                    <td>${getStatusBadge(req.status)}</td>
-                    <td>
-                        <button class="btn btn-sm btn-primary-custom" onclick="showDetail(${req.id})">
-                            <i class="bi bi-eye"></i> Detail
-                        </button>
-                    </td>
-                </tr>
-            `).join('');
+                    <tr>
+                        <td>${index + 1}</td>
+                        <td>${req.nama_lengkap || '-'}</td>
+                        <td>${req.email || '-'}</td>
+                        <td>${new Date(req.created_at).toLocaleDateString('id-ID')}</td>
+                        <td>${getStatusBadge(req.status)}</td>
+                        <td>
+                            <button class="btn btn-sm btn-primary-custom" onclick="showDetail(${req.id})">
+                                <i class="bi bi-eye"></i> Detail
+                            </button>
+                        </td>
+                    </tr>
+                `).join('');
 
                 tableContainer.classList.remove('d-none');
 
             } catch (err) {
                 console.error(err);
                 loadingSpinner.classList.add('d-none');
-                alertEl.className = 'alert alert-danger';
-                alertEl.innerHTML = `
-                <div class="d-flex align-items-center">
-                    <i class="bi bi-exclamation-triangle-fill me-2"></i>
-                    <div>${err.message || 'Terjadi kesalahan saat memuat data'}</div>
-                </div>
-            `;
-                alertEl.classList.remove('d-none');
+                showAlert('danger', err.message || 'Terjadi kesalahan saat memuat data');
             }
         }
 
-        function updateStatistics(data, diproses, diterima, ditolak) {
-            document.getElementById('statDiproses').textContent = diproses;
-            document.getElementById('statDiterima').textContent = diterima;
-            document.getElementById('statDitolak').textContent = ditolak;
+        async function loadUsers() {
+            const token = localStorage.getItem('uipassport_token');
+            const loadingUsers = document.getElementById('loadingUsers');
+            const usersTableContainer = document.getElementById('usersTableContainer');
+            const emptyUsers = document.getElementById('emptyUsers');
+
+            loadingUsers.classList.remove('d-none');
+            usersTableContainer.classList.add('d-none');
+            emptyUsers.classList.add('d-none');
+
+            try {
+                // Get all requirements to extract unique users
+                const res = await fetch(`${backend}/api/requirements/all`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+
+                if (!res.ok) throw new Error('Gagal memuat data user');
+
+                const requirements = await res.json();
+                
+                // Extract unique users from requirements
+                const uniqueUsers = [];
+                const seenEmails = new Set();
+                
+                for (const req of requirements) {
+                    if (!seenEmails.has(req.email)) {
+                        seenEmails.add(req.email);
+                        uniqueUsers.push({
+                            email: req.email,
+                            nama_lengkap: req.nama_lengkap,
+                            user_id: req.user_id,
+                            created_at: req.created_at
+                        });
+                    }
+                }
+
+                // Update total users stat
+                document.getElementById('statTotalUsers').textContent = uniqueUsers.length;
+
+                loadingUsers.classList.add('d-none');
+
+                if (uniqueUsers.length === 0) {
+                    emptyUsers.classList.remove('d-none');
+                    return;
+                }
+
+                const tbody = document.getElementById('usersTableBody');
+                tbody.innerHTML = uniqueUsers.map((user, index) => `
+                    <tr>
+                        <td>${index + 1}</td>
+                        <td>${user.nama_lengkap || '-'}</td>
+                        <td>${user.email || '-'}</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>${new Date(user.created_at).toLocaleDateString('id-ID')}</td>
+                        <td>
+                            <button class="btn btn-sm btn-primary-custom" onclick="showUserDetail(${user.user_id})">
+                                <i class="bi bi-eye"></i> Detail
+                            </button>
+                        </td>
+                    </tr>
+                `).join('');
+
+                usersTableContainer.classList.remove('d-none');
+
+            } catch (err) {
+                console.error('Error loading users:', err);
+                loadingUsers.classList.add('d-none');
+                showAlert('danger', 'Gagal memuat data user');
+            }
+        }
+
+        async function showUserDetail(userId) {
+            const token = localStorage.getItem('uipassport_token');
+
+            try {
+                // For now, we'll fetch from requirements and find the user
+                // In production, you should have a dedicated endpoint
+                const res = await fetch(`${backend}/api/requirements/all`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+
+                const data = await res.json();
+                const userReq = data.find(r => r.user_id === userId);
+
+                if (!userReq) throw new Error('User tidak ditemukan');
+
+                document.getElementById('userDetailNama').textContent = userReq.nama_lengkap || '-';
+                document.getElementById('userDetailEmail').textContent = userReq.email || '-';
+                document.getElementById('userDetailTglLahir').textContent = '-';
+                document.getElementById('userDetailTempatLahir').textContent = '-';
+                document.getElementById('userDetailTelepon').textContent = '-';
+                document.getElementById('userDetailAlamat').textContent = '-';
+                document.getElementById('userDetailJoined').textContent = new Date(userReq.created_at).toLocaleDateString('id-ID');
+
+                userDetailModal.show();
+
+            } catch (err) {
+                console.error('Error showing user detail:', err);
+                showAlert('danger', 'Gagal memuat detail user');
+            }
         }
 
         function getStatusBadge(status) {
@@ -353,7 +685,6 @@
             };
             
             const config = badges[status] || { class: 'bg-secondary', text: '-' };
-            
             badgeElement.className = `badge ${config.class}`;
             badgeElement.textContent = config.text;
         }
@@ -369,9 +700,7 @@
                 const data = await res.json();
                 const requirement = data.find(r => r.id === reqId);
 
-                if (!requirement) {
-                    throw new Error('Data tidak ditemukan');
-                }
+                if (!requirement) throw new Error('Data tidak ditemukan');
 
                 document.getElementById('detailNama').textContent = requirement.nama_lengkap || '-';
                 document.getElementById('detailEmail').textContent = requirement.email || '-';
@@ -436,7 +765,7 @@
 
             } catch (err) {
                 console.error('Error in showDetail:', err);
-                alert('Gagal memuat detail: ' + err.message);
+                showAlert('danger', 'Gagal memuat detail: ' + err.message);
             }
         }
 
@@ -473,29 +802,36 @@
                 }
 
                 detailModal.hide();
-
-                const alertEl = document.getElementById('dashboardAlert');
-                alertEl.className = 'alert alert-success';
-                alertEl.innerHTML = `
-                <div class="d-flex align-items-center">
-                    <i class="bi bi-check-circle-fill me-2"></i>
-                    <div>Status berhasil diperbarui</div>
-                </div>
-            `;
-                alertEl.classList.remove('d-none');
+                showAlert('success', 'Status berhasil diperbarui');
 
                 setTimeout(() => {
-                    alertEl.classList.add('d-none');
+                    loadStatistics();
                     loadRequirements();
-                }, 2000);
+                }, 1500);
 
             } catch (err) {
                 console.error(err);
-                alert('Gagal update status: ' + err.message);
+                showAlert('danger', 'Gagal update status: ' + err.message);
             } finally {
                 spinner.classList.add('d-none');
                 submitBtn.disabled = false;
             }
+        }
+
+        function showAlert(type, message) {
+            const alertEl = document.getElementById('dashboardAlert');
+            const icon = type === 'success' ? 'check-circle-fill' : 'exclamation-triangle-fill';
+
+            alertEl.className = `alert alert-${type}`;
+            alertEl.innerHTML = `
+                <div class="d-flex align-items-center">
+                    <i class="bi bi-${icon} me-2"></i>
+                    <div>${message}</div>
+                </div>
+            `;
+            alertEl.classList.remove('d-none');
+
+            setTimeout(() => alertEl.classList.add('d-none'), 3000);
         }
     </script>
 @endpush
