@@ -34,6 +34,16 @@
                                     Bergabung: <span id="profileJoined">-</span>
                                 </p>
                             </div>
+
+                            <!-- Action Buttons -->
+                            <div class="mt-3 d-grid gap-2">
+                                <button class="btn btn-outline-primary btn-sm" onclick="showEditModal()">
+                                    <i class="bi bi-pencil me-1"></i>Edit Profil
+                                </button>
+                                <button class="btn btn-outline-secondary btn-sm" onclick="showPasswordModal()">
+                                    <i class="bi bi-key me-1"></i>Ganti Password
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -227,8 +237,119 @@
         </div>
     </section>
 
+    <!-- Edit Profile Modal -->
+    <div class="modal fade" id="editProfileModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content" style="border-radius: 1rem; border: none;">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title fw-bold">
+                        <i class="bi bi-pencil text-primary me-2"></i>Edit Profil
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="editAlert" class="alert d-none mb-3"></div>
+
+                    <form id="editProfileForm">
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold small">
+                                <i class="bi bi-person me-1"></i>Nama Lengkap <span class="text-danger">*</span>
+                            </label>
+                            <input type="text" id="editNama" class="form-control" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold small">
+                                <i class="bi bi-calendar me-1"></i>Tanggal Lahir
+                            </label>
+                            <input type="date" id="editTanggalLahir" class="form-control">
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold small">
+                                <i class="bi bi-geo-alt me-1"></i>Tempat Lahir
+                            </label>
+                            <input type="text" id="editTempatLahir" class="form-control">
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold small">
+                                <i class="bi bi-phone me-1"></i>No. Telepon
+                            </label>
+                            <input type="tel" id="editTelepon" class="form-control" placeholder="+62...">
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold small">
+                                <i class="bi bi-house me-1"></i>Alamat
+                            </label>
+                            <textarea id="editAlamat" class="form-control" rows="3"></textarea>
+                        </div>
+
+                        <div class="d-flex gap-2 justify-content-end">
+                            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Batal</button>
+                            <button type="submit" class="btn btn-primary-custom">
+                                <span class="spinner-border spinner-border-sm d-none" id="editSpinner"></span>
+                                <i class="bi bi-check-circle me-1"></i>Simpan Perubahan
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Change Password Modal -->
+    <div class="modal fade" id="passwordModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content" style="border-radius: 1rem; border: none;">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title fw-bold">
+                        <i class="bi bi-key text-primary me-2"></i>Ganti Password
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="passwordAlert" class="alert d-none mb-3"></div>
+
+                    <form id="changePasswordForm">
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold small">
+                                <i class="bi bi-lock me-1"></i>Password Lama <span class="text-danger">*</span>
+                            </label>
+                            <input type="password" id="currentPassword" class="form-control" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold small">
+                                <i class="bi bi-lock-fill me-1"></i>Password Baru <span class="text-danger">*</span>
+                            </label>
+                            <input type="password" id="newPassword" class="form-control" minlength="6" required>
+                            <small class="text-muted">Minimal 6 karakter</small>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold small">
+                                <i class="bi bi-lock-fill me-1"></i>Konfirmasi Password Baru <span
+                                    class="text-danger">*</span>
+                            </label>
+                            <input type="password" id="confirmPassword" class="form-control" minlength="6" required>
+                        </div>
+
+                        <div class="d-flex gap-2 justify-content-end">
+                            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Batal</button>
+                            <button type="submit" class="btn btn-primary-custom">
+                                <span class="spinner-border spinner-border-sm d-none" id="passwordSpinner"></span>
+                                <i class="bi bi-check-circle me-1"></i>Ganti Password
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <style>
-        /* Override untuk ukuran yang lebih compact */
         .card {
             border: none !important;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
@@ -252,7 +373,6 @@
             background-color: #f8f9fa !important;
         }
 
-        /* Tombol lebih kecil */
         .btn-sm {
             padding: 0.25rem 0.5rem !important;
             font-size: 0.75rem !important;
@@ -263,47 +383,39 @@
 @push('scripts')
     <script>
         const backend = "{{ env('BACKEND_URL', 'http://localhost:3000') }}";
+        let editProfileModal, passwordModal;
+        let currentUserData = null;
 
-        // Untuk PROFILE (Any authenticated user)
-(function checkAnyAuth() {
-    const token = localStorage.getItem('uipassport_token');
-    const userStr = localStorage.getItem('uipassport_user');
-
-    if (!token || !userStr) {
-        console.log('No auth, redirecting to login');
-        window.location.replace('/login');
-        return;
-    }
-
-    try {
-        JSON.parse(userStr); // Just validate it's valid JSON
-    } catch (e) {
-        console.error('Invalid user data');
-        localStorage.removeItem('uipassport_token');
-        localStorage.removeItem('uipassport_user');
-        window.location.replace('/login');
-    }
-})();
-
-        // Initialize on page load
-        document.addEventListener('DOMContentLoaded', function () {
-            console.log('Profile page loaded');
-
-            // Check authentication
+        // Auth check
+        (function checkAnyAuth() {
             const token = localStorage.getItem('uipassport_token');
             const userStr = localStorage.getItem('uipassport_user');
 
             if (!token || !userStr) {
-                console.log('No auth token, redirecting to login');
-                window.location.href = '/login';
+                console.log('No auth, redirecting to login');
+                window.location.replace('/login');
                 return;
             }
 
-            console.log('Auth token found, loading data...');
+            try {
+                JSON.parse(userStr);
+            } catch (e) {
+                console.error('Invalid user data');
+                localStorage.removeItem('uipassport_token');
+                localStorage.removeItem('uipassport_user');
+                window.location.replace('/login');
+            }
+        })();
 
-            // Load profile data
+        document.addEventListener('DOMContentLoaded', function () {
+            editProfileModal = new bootstrap.Modal(document.getElementById('editProfileModal'));
+            passwordModal = new bootstrap.Modal(document.getElementById('passwordModal'));
+
             loadProfile();
             loadSubmissionStatus();
+
+            document.getElementById('editProfileForm').addEventListener('submit', handleEditProfile);
+            document.getElementById('changePasswordForm').addEventListener('submit', handleChangePassword);
         });
 
         async function loadProfile() {
@@ -312,23 +424,15 @@
             const dataEl = document.getElementById('profileData');
 
             try {
-                console.log('Fetching profile data...');
-
                 const res = await fetch(`${backend}/api/auth/me`, {
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    }
+                    headers: { 'Authorization': `Bearer ${token}` }
                 });
 
-                if (!res.ok) {
-                    console.error('Profile fetch failed:', res.status, res.statusText);
-                    throw new Error('Gagal memuat profil');
-                }
+                if (!res.ok) throw new Error('Gagal memuat profil');
 
                 const user = await res.json();
-                console.log('Profile data received:', user);
+                currentUserData = user;
 
-                // Update profile card
                 document.getElementById('profileNama').textContent = user.nama_lengkap || 'User';
                 document.getElementById('profileEmail').textContent = user.email || '-';
                 document.getElementById('profileRole').textContent = user.role === 'admin' ? 'Administrator' : 'User';
@@ -336,7 +440,6 @@
                     ? new Date(user.created_at).toLocaleDateString('id-ID')
                     : '-';
 
-                // Update detail info
                 document.getElementById('infoNama').textContent = user.nama_lengkap || '-';
                 document.getElementById('infoEmail').textContent = user.email || '-';
                 document.getElementById('infoTglLahir').textContent = user.tanggal_lahir
@@ -349,17 +452,169 @@
                 loadingEl.classList.add('d-none');
                 dataEl.classList.remove('d-none');
 
-                console.log('Profile data loaded successfully');
-
             } catch (err) {
                 console.error('Profile load error:', err);
                 loadingEl.innerHTML = `
-                <div class="alert alert-danger py-1">
-                    <i class="bi bi-exclamation-triangle me-2"></i>
-                    <small>Gagal memuat profil: ${err.message}</small>
-                </div>
-            `;
+                    <div class="alert alert-danger py-1">
+                        <i class="bi bi-exclamation-triangle me-2"></i>
+                        <small>Gagal memuat profil: ${err.message}</small>
+                    </div>`;
             }
+        }
+
+        function showEditModal() {
+            if (!currentUserData) return;
+
+            document.getElementById('editNama').value = currentUserData.nama_lengkap || '';
+            document.getElementById('editTanggalLahir').value = currentUserData.tanggal_lahir || '';
+            document.getElementById('editTempatLahir').value = currentUserData.tempat_lahir || '';
+            document.getElementById('editTelepon').value = currentUserData.no_telepon || '';
+            document.getElementById('editAlamat').value = currentUserData.alamat || '';
+
+            document.getElementById('editAlert').classList.add('d-none');
+            editProfileModal.show();
+        }
+
+        function showPasswordModal() {
+            document.getElementById('changePasswordForm').reset();
+            document.getElementById('passwordAlert').classList.add('d-none');
+            passwordModal.show();
+        }
+
+        async function handleEditProfile(e) {
+            e.preventDefault();
+
+            const token = localStorage.getItem('uipassport_token');
+            const spinner = document.getElementById('editSpinner');
+            const submitBtn = document.querySelector('#editProfileForm button[type="submit"]');
+            const alertEl = document.getElementById('editAlert');
+
+            const payload = {
+                nama_lengkap: document.getElementById('editNama').value.trim(),
+                tanggal_lahir: document.getElementById('editTanggalLahir').value || null,
+                tempat_lahir: document.getElementById('editTempatLahir').value.trim() || null,
+                no_telepon: document.getElementById('editTelepon').value.trim() || null,
+                alamat: document.getElementById('editAlamat').value.trim() || null
+            };
+
+            if (!payload.nama_lengkap) {
+                showAlert(alertEl, 'danger', 'Nama lengkap wajib diisi');
+                return;
+            }
+
+            spinner.classList.remove('d-none');
+            submitBtn.disabled = true;
+
+            try {
+                const res = await fetch(`${backend}/api/auth/profile`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                const data = await res.json();
+
+                if (!res.ok) {
+                    throw new Error(data.message || 'Gagal memperbarui profil');
+                }
+
+                // Update localStorage
+                const userStr = localStorage.getItem('uipassport_user');
+                if (userStr) {
+                    const user = JSON.parse(userStr);
+                    user.nama_lengkap = data.user.nama_lengkap;
+                    localStorage.setItem('uipassport_user', JSON.stringify(user));
+                }
+
+                showAlert(alertEl, 'success', 'Profil berhasil diperbarui');
+
+                setTimeout(() => {
+                    editProfileModal.hide();
+                    loadProfile();
+                }, 1500);
+
+            } catch (err) {
+                console.error(err);
+                showAlert(alertEl, 'danger', err.message);
+            } finally {
+                spinner.classList.add('d-none');
+                submitBtn.disabled = false;
+            }
+        }
+
+        async function handleChangePassword(e) {
+            e.preventDefault();
+
+            const token = localStorage.getItem('uipassport_token');
+            const spinner = document.getElementById('passwordSpinner');
+            const submitBtn = document.querySelector('#changePasswordForm button[type="submit"]');
+            const alertEl = document.getElementById('passwordAlert');
+
+            const currentPassword = document.getElementById('currentPassword').value;
+            const newPassword = document.getElementById('newPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+
+            if (newPassword !== confirmPassword) {
+                showAlert(alertEl, 'danger', 'Password baru dan konfirmasi tidak cocok');
+                return;
+            }
+
+            if (newPassword.length < 6) {
+                showAlert(alertEl, 'danger', 'Password baru minimal 6 karakter');
+                return;
+            }
+
+            spinner.classList.remove('d-none');
+            submitBtn.disabled = true;
+
+            try {
+                const res = await fetch(`${backend}/api/auth/password`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({
+                        current_password: currentPassword,
+                        new_password: newPassword
+                    })
+                });
+
+                const data = await res.json();
+
+                if (!res.ok) {
+                    throw new Error(data.message || 'Gagal mengubah password');
+                }
+
+                showAlert(alertEl, 'success', 'Password berhasil diubah');
+
+                setTimeout(() => {
+                    passwordModal.hide();
+                    document.getElementById('changePasswordForm').reset();
+                }, 1500);
+
+            } catch (err) {
+                console.error(err);
+                showAlert(alertEl, 'danger', err.message);
+            } finally {
+                spinner.classList.add('d-none');
+                submitBtn.disabled = false;
+            }
+        }
+
+        function showAlert(element, type, message) {
+            const icon = type === 'success' ? 'check-circle-fill' : 'exclamation-triangle-fill';
+            element.className = `alert alert-${type}`;
+            element.innerHTML = `
+                    <div class="d-flex align-items-center">
+                        <i class="bi bi-${icon} me-2"></i>
+                        <div>${message}</div>
+                    </div>
+                `;
+            element.classList.remove('d-none');
         }
 
         async function loadSubmissionStatus() {
@@ -367,83 +622,59 @@
             const userStr = localStorage.getItem('uipassport_user');
             const user = JSON.parse(userStr);
 
-            console.log('Loading submission status for user:', user);
-
             const loadingEl = document.getElementById('loadingSubmission');
             const noSubmissionEl = document.getElementById('noSubmission');
             const hasSubmissionEl = document.getElementById('hasSubmission');
 
-            // Admin shouldn't see submission status
             if (user.role === 'admin') {
-                console.log('User is admin, showing admin message');
                 loadingEl.classList.add('d-none');
                 noSubmissionEl.classList.remove('d-none');
                 noSubmissionEl.innerHTML = `
-                <div class="text-center py-2">
-                    <i class="bi bi-shield-check text-primary mb-2" style="font-size: 2rem;"></i>
-                    <h6 class="fw-bold mb-1 small">Akun Administrator</h6>
-                    <p class="text-muted small mb-2">Anda login sebagai admin.</p>
-                    <a href="/dashboard" class="btn btn-primary btn-sm px-2">
-                        <i class="bi bi-speedometer2 me-1"></i>Dashboard Admin
-                    </a>
-                </div>
-            `;
+                    <div class="text-center py-2">
+                        <i class="bi bi-shield-check text-primary mb-2" style="font-size: 2rem;"></i>
+                        <h6 class="fw-bold mb-1 small">Akun Administrator</h6>
+                        <p class="text-muted small mb-2">Anda login sebagai admin.</p>
+                        <a href="/dashboard" class="btn btn-primary btn-sm px-2">
+                            <i class="bi bi-speedometer2 me-1"></i>Dashboard Admin
+                        </a>
+                    </div>`;
                 return;
             }
 
             try {
-                console.log('Fetching submission status...');
-
                 const res = await fetch(`${backend}/api/requirements/my-requirements`, {
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    }
+                    headers: { 'Authorization': `Bearer ${token}` }
                 });
 
-                if (!res.ok) {
-                    console.error('Submission fetch failed:', res.status, res.statusText);
-                    throw new Error('Gagal memuat status pengajuan');
-                }
+                if (!res.ok) throw new Error('Gagal memuat status pengajuan');
 
                 const data = await res.json();
-                console.log('Submission data received:', data);
-
                 loadingEl.classList.add('d-none');
 
                 if (!data || data.length === 0) {
-                    console.log('No submission found');
                     noSubmissionEl.classList.remove('d-none');
                     return;
                 }
 
-                // Get latest submission
                 const submission = data[0];
-                console.log('Latest submission:', submission);
-
-                // Show submission data
                 hasSubmissionEl.classList.remove('d-none');
 
-                // Set status
                 updateStatusDisplay(submission.status);
 
-                // Set date
                 document.getElementById('statusDate').innerHTML = `
-                <i class="bi bi-calendar3 me-1"></i>Diajukan: ${new Date(submission.created_at).toLocaleDateString('id-ID', {
+                    <i class="bi bi-calendar3 me-1"></i>Diajukan: ${new Date(submission.created_at).toLocaleDateString('id-ID', {
                     day: 'numeric',
                     month: 'short',
                     year: 'numeric',
                     hour: '2-digit',
                     minute: '2-digit'
-                })}
-            `;
+                })}`;
 
-                // Set admin notes
                 if (submission.catatan_admin) {
                     document.getElementById('adminNotesContainer').classList.remove('d-none');
                     document.getElementById('adminNotes').textContent = submission.catatan_admin;
                 }
 
-                // Set document links
                 if (submission.ktp_path) {
                     document.getElementById('linkKTP').href = `${backend}/${submission.ktp_path}`;
                 }
@@ -466,22 +697,17 @@
                     document.getElementById('linkGantiNama').href = `${backend}/${submission.surat_ganti_nama_path}`;
                 }
 
-                console.log('Submission status loaded successfully');
-
             } catch (err) {
                 console.error('Submission load error:', err);
                 loadingEl.innerHTML = `
-                <div class="alert alert-danger py-1">
-                    <i class="bi bi-exclamation-triangle me-2"></i>
-                    <small>Gagal memuat status pengajuan: ${err.message}</small>
-                </div>
-            `;
+                    <div class="alert alert-danger py-1">
+                        <i class="bi bi-exclamation-triangle me-2"></i>
+                        <small>Gagal memuat status pengajuan: ${err.message}</small>
+                    </div>`;
             }
         }
 
         function updateStatusDisplay(status) {
-            console.log('Updating status display for:', status);
-
             const statusAlert = document.getElementById('statusAlert');
             const statusIcon = document.getElementById('statusIcon');
             const statusTitle = document.getElementById('statusTitle');

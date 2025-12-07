@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="id">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -376,7 +377,8 @@
                         <a class="nav-link" data-target="overview" onclick="handleNavClick('overview')">Overview</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" data-target="requirements" onclick="handleNavClick('requirements')">Persyaratan</a>
+                        <a class="nav-link" data-target="requirements"
+                            onclick="handleNavClick('requirements')">Persyaratan</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" data-target="how" onclick="handleNavClick('how')">Cara Daftar</a>
@@ -393,7 +395,8 @@
 
                 <div id="userMenu" class="d-none">
                     <div class="dropdown">
-                        <button class="btn btn-outline-primary-custom dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                        <button class="btn btn-outline-primary-custom dropdown-toggle" type="button"
+                            data-bs-toggle="dropdown">
                             <i class="bi bi-person-circle me-2"></i>
                             <span id="userName">User</span>
                         </button>
@@ -439,7 +442,8 @@
                     <h5 class="mb-3">
                         <i class="bi bi-passport me-2"></i>Kantor Imigrasi
                     </h5>
-                    <p class="small mb-3">Portal informasi pembuatan paspor – panduan lengkap, persyaratan, dan proses pendaftaran yang mudah dan cepat.</p>
+                    <p class="small mb-3">Portal informasi pembuatan paspor – panduan lengkap, persyaratan, dan proses
+                        pendaftaran yang mudah dan cepat.</p>
                     <p class="small mb-0">
                         <i class="bi bi-geo-alt-fill me-2"></i>Jl. Contoh No.10, Jakarta Pusat
                     </p>
@@ -449,7 +453,8 @@
                     <h6 class="mb-3">Navigasi</h6>
                     <ul class="list-unstyled small">
                         <li class="mb-2"><a href="#overview"><i class="bi bi-chevron-right me-1"></i>Overview</a></li>
-                        <li class="mb-2"><a href="#requirements"><i class="bi bi-chevron-right me-1"></i>Persyaratan</a></li>
+                        <li class="mb-2"><a href="#requirements"><i class="bi bi-chevron-right me-1"></i>Persyaratan</a>
+                        </li>
                         <li class="mb-2"><a href="#how"><i class="bi bi-chevron-right me-1"></i>Cara Daftar</a></li>
                         <li class="mb-2"><a href="#faq"><i class="bi bi-chevron-right me-1"></i>FAQ</a></li>
                     </ul>
@@ -526,6 +531,30 @@
                 }
             } else {
                 showGuestNav();
+            }
+        }
+
+        // Tambahkan fungsi ini setelah fungsi checkAuth()
+        function handleDynamicNavigation(targetUrl) {
+            const token = localStorage.getItem('uipassport_token');
+            const userStr = localStorage.getItem('uipassport_user');
+
+            if (!token || !userStr) {
+                // Not logged in, go to register
+                window.location.href = '/register';
+                return;
+            }
+
+            try {
+                const user = JSON.parse(userStr);
+                if (user.role === 'admin') {
+                    window.location.href = '/dashboard';
+                } else {
+                    window.location.href = '/form';
+                }
+            } catch (e) {
+                console.error('Error parsing user data:', e);
+                window.location.href = '/register';
             }
         }
 
@@ -634,4 +663,5 @@
     </script>
     @stack('scripts')
 </body>
+
 </html>
