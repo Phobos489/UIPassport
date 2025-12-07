@@ -12,17 +12,20 @@
                             <h6 class="fw-bold mb-3 pb-2 border-bottom">
                                 <i class="bi bi-grid-fill text-primary me-2"></i>Menu Admin
                             </h6>
-                            
+
                             <nav class="nav flex-column">
-                                <a class="nav-link sidebar-link active" href="#" data-section="overview" onclick="switchSection('overview')">
+                                <a class="nav-link sidebar-link active" href="#" data-section="overview"
+                                    onclick="switchSection('overview')">
                                     <i class="bi bi-speedometer2 me-2"></i>
                                     <span>Overview</span>
                                 </a>
-                                <a class="nav-link sidebar-link" href="#" data-section="requirements" onclick="switchSection('requirements')">
+                                <a class="nav-link sidebar-link" href="#" data-section="requirements"
+                                    onclick="switchSection('requirements')">
                                     <i class="bi bi-file-earmark-text me-2"></i>
                                     <span>Pengajuan</span>
                                 </a>
-                                <a class="nav-link sidebar-link" href="#" data-section="users" onclick="switchSection('users')">
+                                <a class="nav-link sidebar-link" href="#" data-section="users"
+                                    onclick="switchSection('users')">
                                     <i class="bi bi-people me-2"></i>
                                     <span>Kelola User</span>
                                 </a>
@@ -195,7 +198,8 @@
     <!-- Modal Detail Requirement -->
     <div class="modal fade" id="detailModal" tabindex="-1">
         <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
-            <div class="modal-content" style="border-radius: 1rem; border: none; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);">
+            <div class="modal-content"
+                style="border-radius: 1rem; border: none; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);">
                 <div class="modal-header border-0 pb-0">
                     <h5 class="modal-title fw-bold">
                         <i class="bi bi-file-earmark-text text-primary me-2"></i>Detail Pengajuan
@@ -252,7 +256,8 @@
                             <div class="border rounded-3 p-3">
                                 <div class="d-flex justify-content-between align-items-center mb-2">
                                     <span class="fw-bold">Dokumen Paspor</span>
-                                    <a id="linkDokumen" href="#" target="_blank" class="btn btn-sm btn-outline-primary-custom">
+                                    <a id="linkDokumen" href="#" target="_blank"
+                                        class="btn btn-sm btn-outline-primary-custom">
                                         <i class="bi bi-eye"></i> Lihat
                                     </a>
                                 </div>
@@ -262,7 +267,8 @@
                             <div class="border rounded-3 p-3">
                                 <div class="d-flex justify-content-between align-items-center mb-2">
                                     <span class="fw-bold">Surat Pewarganegaraan</span>
-                                    <a id="linkSuratPewarganegaraan" href="#" target="_blank" class="btn btn-sm btn-outline-primary-custom">
+                                    <a id="linkSuratPewarganegaraan" href="#" target="_blank"
+                                        class="btn btn-sm btn-outline-primary-custom">
                                         <i class="bi bi-eye"></i> Lihat
                                     </a>
                                 </div>
@@ -272,7 +278,8 @@
                             <div class="border rounded-3 p-3">
                                 <div class="d-flex justify-content-between align-items-center mb-2">
                                     <span class="fw-bold">Surat Ganti Nama</span>
-                                    <a id="linkSuratGantiNama" href="#" target="_blank" class="btn btn-sm btn-outline-primary-custom">
+                                    <a id="linkSuratGantiNama" href="#" target="_blank"
+                                        class="btn btn-sm btn-outline-primary-custom">
                                         <i class="bi bi-eye"></i> Lihat
                                     </a>
                                 </div>
@@ -294,7 +301,8 @@
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Catatan Admin (Opsional)</label>
-                            <textarea class="form-control" id="catatanAdmin" rows="3" placeholder="Tambahkan catatan jika diperlukan..."></textarea>
+                            <textarea class="form-control" id="catatanAdmin" rows="3"
+                                placeholder="Tambahkan catatan jika diperlukan..."></textarea>
                         </div>
                         <div class="d-flex gap-2 justify-content-end">
                             <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Batal</button>
@@ -321,7 +329,8 @@
                 </div>
                 <div class="modal-body">
                     <div class="text-center mb-4">
-                        <div class="bg-primary bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
+                        <div class="bg-primary bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center"
+                            style="width: 80px; height: 80px;">
                             <i class="bi bi-person-fill text-primary" style="font-size: 2.5rem;"></i>
                         </div>
                     </div>
@@ -391,7 +400,7 @@
 
         .sidebar-link.active {
             background: var(--primary);
-            color: white;
+            color: white !important;
         }
 
         .sidebar-link i {
@@ -407,6 +416,7 @@
                 opacity: 0;
                 transform: translateY(10px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -444,13 +454,13 @@
             }
         })();
 
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             detailModal = new bootstrap.Modal(document.getElementById('detailModal'));
             userDetailModal = new bootstrap.Modal(document.getElementById('userDetailModal'));
-            
+
             loadStatistics();
             loadRequirements();
-            
+
             document.getElementById('updateStatusForm').addEventListener('submit', handleUpdateStatus);
         });
 
@@ -504,13 +514,13 @@
                             uniqueEmails.add(req.email);
                         }
                     });
-                    
+
                     document.getElementById('statTotalUsers').textContent = uniqueEmails.size;
                 } else {
                     // Set default if request fails
                     document.getElementById('statTotalUsers').textContent = '0';
                 }
-                
+
             } catch (err) {
                 console.error('Error loading statistics:', err);
                 document.getElementById('statTotalUsers').textContent = '0';
@@ -549,19 +559,19 @@
 
                 const tbody = document.getElementById('requirementsTableBody');
                 tbody.innerHTML = data.map((req, index) => `
-                    <tr>
-                        <td>${index + 1}</td>
-                        <td>${req.nama_lengkap || '-'}</td>
-                        <td>${req.email || '-'}</td>
-                        <td>${new Date(req.created_at).toLocaleDateString('id-ID')}</td>
-                        <td>${getStatusBadge(req.status)}</td>
-                        <td>
-                            <button class="btn btn-sm btn-primary-custom" onclick="showDetail(${req.id})">
-                                <i class="bi bi-eye"></i> Detail
-                            </button>
-                        </td>
-                    </tr>
-                `).join('');
+                        <tr>
+                            <td>${index + 1}</td>
+                            <td>${req.nama_lengkap || '-'}</td>
+                            <td>${req.email || '-'}</td>
+                            <td>${new Date(req.created_at).toLocaleDateString('id-ID')}</td>
+                            <td>${getStatusBadge(req.status)}</td>
+                            <td>
+                                <button class="btn btn-sm btn-primary-custom" onclick="showDetail(${req.id})">
+                                    <i class="bi bi-eye"></i> Detail
+                                </button>
+                            </td>
+                        </tr>
+                    `).join('');
 
                 tableContainer.classList.remove('d-none');
 
@@ -583,54 +593,45 @@
             emptyUsers.classList.add('d-none');
 
             try {
-                // Get all requirements to extract unique users
-                const res = await fetch(`${backend}/api/requirements/all`, {
+                // Gunakan endpoint baru untuk mendapatkan semua users
+                const res = await fetch(`${backend}/api/users/all`, {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
 
                 if (!res.ok) throw new Error('Gagal memuat data user');
 
-                const requirements = await res.json();
-                
-                // Extract unique users from requirements
-                const uniqueUsers = [];
-                const seenEmails = new Set();
-                
-                for (const req of requirements) {
-                    if (!seenEmails.has(req.email)) {
-                        seenEmails.add(req.email);
-                        uniqueUsers.push({
-                            email: req.email,
-                            nama_lengkap: req.nama_lengkap,
-                            user_id: req.user_id,
-                            created_at: req.created_at
-                        });
-                    }
-                }
+                const users = await res.json();
 
                 loadingUsers.classList.add('d-none');
 
-                if (uniqueUsers.length === 0) {
+                if (users.length === 0) {
                     emptyUsers.classList.remove('d-none');
                     return;
                 }
 
                 const tbody = document.getElementById('usersTableBody');
-                tbody.innerHTML = uniqueUsers.map((user, index) => `
+                tbody.innerHTML = users.map((user, index) => {
+                    // Format tanggal lahir
+                    const tglLahir = user.tanggal_lahir
+                        ? new Date(user.tanggal_lahir).toLocaleDateString('id-ID')
+                        : '-';
+
+                    return `
                     <tr>
                         <td>${index + 1}</td>
                         <td>${user.nama_lengkap || '-'}</td>
                         <td>${user.email || '-'}</td>
-                        <td>-</td>
-                        <td>-</td>
+                        <td>${tglLahir}</td>
+                        <td>${user.no_telepon || '-'}</td>
                         <td>${new Date(user.created_at).toLocaleDateString('id-ID')}</td>
                         <td>
-                            <button class="btn btn-sm btn-primary-custom" onclick="showUserDetail(${user.user_id})">
+                            <button class="btn btn-sm btn-primary-custom" onclick="showUserDetail(${user.id})">
                                 <i class="bi bi-eye"></i> Detail
                             </button>
                         </td>
                     </tr>
-                `).join('');
+                `;
+                }).join('');
 
                 usersTableContainer.classList.remove('d-none');
 
@@ -645,24 +646,35 @@
             const token = localStorage.getItem('uipassport_token');
 
             try {
-                // For now, we'll fetch from requirements and find the user
-                // In production, you should have a dedicated endpoint
-                const res = await fetch(`${backend}/api/requirements/all`, {
+                // Gunakan endpoint baru
+                const res = await fetch(`${backend}/api/users/${userId}`, {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
 
-                const data = await res.json();
-                const userReq = data.find(r => r.user_id === userId);
+                if (!res.ok) throw new Error('User tidak ditemukan');
 
-                if (!userReq) throw new Error('User tidak ditemukan');
+                const user = await res.json();
 
-                document.getElementById('userDetailNama').textContent = userReq.nama_lengkap || '-';
-                document.getElementById('userDetailEmail').textContent = userReq.email || '-';
-                document.getElementById('userDetailTglLahir').textContent = '-';
-                document.getElementById('userDetailTempatLahir').textContent = '-';
-                document.getElementById('userDetailTelepon').textContent = '-';
-                document.getElementById('userDetailAlamat').textContent = '-';
-                document.getElementById('userDetailJoined').textContent = new Date(userReq.created_at).toLocaleDateString('id-ID');
+                // Format tanggal lahir
+                const tglLahir = user.tanggal_lahir
+                    ? new Date(user.tanggal_lahir).toLocaleDateString('id-ID', {
+                        day: 'numeric',
+                        month: 'long',
+                        year: 'numeric'
+                    })
+                    : '-';
+
+                document.getElementById('userDetailNama').textContent = user.nama_lengkap || '-';
+                document.getElementById('userDetailEmail').textContent = user.email || '-';
+                document.getElementById('userDetailTglLahir').textContent = tglLahir;
+                document.getElementById('userDetailTempatLahir').textContent = user.tempat_lahir || '-';
+                document.getElementById('userDetailTelepon').textContent = user.no_telepon || '-';
+                document.getElementById('userDetailAlamat').textContent = user.alamat || '-';
+                document.getElementById('userDetailJoined').textContent = new Date(user.created_at).toLocaleDateString('id-ID', {
+                    day: 'numeric',
+                    month: 'long',
+                    year: 'numeric'
+                });
 
                 userDetailModal.show();
 
@@ -690,7 +702,7 @@
                 'diterima': { class: 'bg-success', text: 'Diterima' },
                 'ditolak': { class: 'bg-danger', text: 'Ditolak' }
             };
-            
+
             const config = badges[status] || { class: 'bg-secondary', text: '-' };
             badgeElement.className = `badge ${config.class}`;
             badgeElement.textContent = config.text;
@@ -718,7 +730,7 @@
                     hour: '2-digit',
                     minute: '2-digit'
                 });
-                
+
                 updateStatusBadgeElement(requirement.status);
 
                 if (requirement.ktp_path) {
@@ -744,7 +756,7 @@
 
                 const containerPewarganegaraan = document.getElementById('containerSuratPewarganegaraan');
                 const linkPewarganegaraan = document.getElementById('linkSuratPewarganegaraan');
-                
+
                 if (requirement.surat_pewarganegaraan_path) {
                     containerPewarganegaraan.classList.remove('d-none');
                     linkPewarganegaraan.href = `${backend}/${requirement.surat_pewarganegaraan_path}`;
@@ -755,7 +767,7 @@
 
                 const containerGantiNama = document.getElementById('containerSuratGantiNama');
                 const linkGantiNama = document.getElementById('linkSuratGantiNama');
-                
+
                 if (requirement.surat_ganti_nama_path) {
                     containerGantiNama.classList.remove('d-none');
                     linkGantiNama.href = `${backend}/${requirement.surat_ganti_nama_path}`;
@@ -831,11 +843,11 @@
 
             alertEl.className = `alert alert-${type}`;
             alertEl.innerHTML = `
-                <div class="d-flex align-items-center">
-                    <i class="bi bi-${icon} me-2"></i>
-                    <div>${message}</div>
-                </div>
-            `;
+                    <div class="d-flex align-items-center">
+                        <i class="bi bi-${icon} me-2"></i>
+                        <div>${message}</div>
+                    </div>
+                `;
             alertEl.classList.remove('d-none');
 
             setTimeout(() => alertEl.classList.add('d-none'), 3000);
